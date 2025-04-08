@@ -1945,6 +1945,31 @@ namespace WindBot.Game.AI.Decks
         
         private bool SpellSet()
         {
+            if (Card == null || (!Card.IsSpell() && !Card.IsTrap())) return false;
+
+            // Track this action with RL if available
+            if (RL != null)
+            {
+                // Track both specific and generic Set actions
+                RL.TrackAction(Card.Id, ActionType.SetSpellTrap);
+                RL.TrackAction(Card.Id, ActionType.Set);
+                
+                // Use specific SetSpellTrap action values for decision making
+                double setValue = RL.GetCardActionValue(Card.Id, ActionType.SetSpellTrap);
+                
+                // Use RL values if they're strong
+                if (setValue > 5.0)
+                {
+                    Logger.DebugWriteLine($"RL suggests setting spell/trap {Card.Id} (value: {setValue})");
+                    return Bot.SpellZone.GetMatchingCardsCount(card => card == null) > 0;
+                }
+                else if (setValue < -5.0)
+                {
+                    Logger.DebugWriteLine($"RL suggests NOT setting spell/trap {Card.Id} (value: {setValue})");
+                    return false;
+                }
+            }
+            
             // Set spell/trap cards if we have empty zones
             return Bot.SpellZone.GetMatchingCardsCount(card => card == null) > 0 && 
                   (Card.IsSpell() || Card.IsTrap());
@@ -1958,7 +1983,11 @@ namespace WindBot.Game.AI.Decks
             // Track this action with RL if available
             if (RL != null)
             {
+                // Track both specific and generic Set actions
                 RL.TrackAction(Card.Id, ActionType.SetMonster);
+                RL.TrackAction(Card.Id, ActionType.Set);
+                
+                // Use specific SetMonster action values for decision making
                 double setValue = RL.GetCardActionValue(Card.Id, ActionType.SetMonster);
                 
                 // Use RL values if they're strong
