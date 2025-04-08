@@ -764,6 +764,9 @@ namespace WindBot.Game.AI.Decks
             // Essential set card logic - use SpellSet for both spells and traps
             AddExecutor(ExecutorType.SpellSet, SpellSet);
             
+            // Add monster set logic
+            AddExecutor(ExecutorType.MonsterSet, MonsterSet);
+            
             // Defensive battle position changes
             AddExecutor(ExecutorType.Repos, MonsterRepos);
             
@@ -1945,6 +1948,55 @@ namespace WindBot.Game.AI.Decks
             // Set spell/trap cards if we have empty zones
             return Bot.SpellZone.GetMatchingCardsCount(card => card == null) > 0 && 
                   (Card.IsSpell() || Card.IsTrap());
+        }
+        
+        // Method to set monsters in defense position
+        private bool MonsterSet()
+        {
+            if (Card == null || !Card.IsMonster()) return false;
+            
+            // Track this action with RL if available
+            if (RL != null)
+            {
+                RL.TrackAction(Card.Id, ActionType.SetMonster);
+                double setValue = RL.GetCardActionValue(Card.Id, ActionType.SetMonster);
+                
+                // Use RL values if they're strong
+                if (setValue > 5.0)
+                {
+                    Logger.DebugWriteLine($"RL suggests setting monster {Card.Id} (value: {setValue})");
+                    return true;
+                }
+                else if (setValue < -5.0)
+                {
+                    Logger.DebugWriteLine($"RL suggests NOT setting monster {Card.Id} (value: {setValue})");
+                    return false;
+                }
+            }
+            
+            // Defense is better than attack for this monster
+            if (Card.Defense > Card.Attack)
+            {
+                Logger.DebugWriteLine($"Setting {Card.Id} in defense position (DEF {Card.Defense} > ATK {Card.Attack})");
+                return true;
+            }
+            
+            // Set low attack monsters or monsters with protective effects
+            if (Card.Attack <= 1000 || Card.HasType(CardType.Flip))
+            {
+                Logger.DebugWriteLine($"Setting {Card.Id} due to low ATK or flip effect");
+                return true;
+            }
+            
+            // Check if enemy has strong monsters that our monster can't beat
+            if (Util.IsOneEnemyBetterThanValue(Card.Attack, true))
+            {
+                Logger.DebugWriteLine($"Setting {Card.Id} because enemy has stronger monsters");
+                return true;
+            }
+            
+            // Default: Set 40% of monsters for safety
+            return Program.Rand.Next(10) >= 6;
         }
         
         // Updated to use EvaluateCardWithContext and RL
