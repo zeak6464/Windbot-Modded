@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "+kpikTYSpes=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\zeak6\\.nuget\\packages\\embeddinator-4000\\0.4.0\\embeddinator-4000.0.4.0.nupkg.sha512",
+    "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.animated.vector.drawable\\25.4.0.2\\xamarin.android.support.animated.vector.drawable.25.4.0.2.nupkg.sha512",
+    "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.annotations\\25.4.0.2\\xamarin.android.support.annotations.25.4.0.2.nupkg.sha512",
+    "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.compat\\25.4.0.2\\xamarin.android.support.compat.25.4.0.2.nupkg.sha512",
+    "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.core.ui\\25.4.0.2\\xamarin.android.support.core.ui.25.4.0.2.nupkg.sha512",
+    "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.core.utils\\25.4.0.2\\xamarin.android.support.core.utils.25.4.0.2.nupkg.sha512",
+    "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.fragment\\25.4.0.2\\xamarin.android.support.fragment.25.4.0.2.nupkg.sha512",
+    "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.media.compat\\25.4.0.2\\xamarin.android.support.media.compat.25.4.0.2.nupkg.sha512",
+    "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.v7.appcompat\\25.4.0.2\\xamarin.android.support.v7.appcompat.25.4.0.2.nupkg.sha512",
+    "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.vector.drawable\\25.4.0.2\\xamarin.android.support.vector.drawable.25.4.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

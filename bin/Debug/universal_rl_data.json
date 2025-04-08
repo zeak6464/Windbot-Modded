@@ -1,0 +1,431 @@
+{
+  "ActionValues": {
+    "87025064:Activate": 856.71361282343889,
+    "79814787:Summon": -4.2345960376498191,
+    "59822133:SpSummon": -1.5477380646219712,
+    "8240199:Summon": -1.6281603275520422,
+    "38517737:SpSummon": 0.33591251654879761,
+    "63767246:SpSummon": -1.4767221010548968,
+    "45467446:Summon": -4.8892782071346952,
+    "71039903:Summon": -1.9057890850575583,
+    "6853254:Activate": -16.746811587442565,
+    "63767246:Activate": -13.391600032803025,
+    "71039903:Activate": -6.493942524053022,
+    "40908371:ToAttack": 0.13152167676022453,
+    "45467446:ToDefense": -8.8096438989653816,
+    "89631139:Summon": -5.090196879025882,
+    "63422098:SpSummon": -16.871156887674186,
+    "18144506:Activate": 43.22749239003037,
+    "63767246:ToDefense": -3.2727704693891169,
+    "45467446:Activate": -8.67423053296723,
+    "89631139:ToDefense": -6.3415063606438018,
+    "59822133:ToDefense": 3.77550417686319,
+    "71039903:ToDefense": 2.7535246301900127,
+    "33909817:SpSummon": -2.4499793376940651,
+    "33909817:ToDefense": -2.4871653846638111,
+    "2530830:SpSummon": -10.443984614864666,
+    "18963306:SpSummon": -8.4578577876755343,
+    "39030163:SpSummon": -10.28353682903693,
+    "2530830:ToDefense": -3.7974583951016645,
+    "59822133:Activate": -13.77357113643226,
+    "8240199:ToDefense": 7.5596124476496778,
+    "38517737:ToDefense": 4.29188104894398,
+    "79814787:ToDefense": -6.522246438043787,
+    "31801517:SpSummon": -0.76676972001378607,
+    "8240199:ToAttack": 5.3523646750095493,
+    "33909817:ToAttack": 8.2512283747898323,
+    "38517737:ToAttack": 0.0,
+    "59822133:ToAttack": -9.28204540860197,
+    "63767246:ToAttack": -6.5040473521062383,
+    "40908371:ToDefense": -1.556877570204569,
+    "58820923:SpSummon": -0.82928407157829731,
+    "31801517:ToDefense": 8.949910407393876,
+    "63422098:ToDefense": -26.205961730425731,
+    "31801517:ToAttack": 0.0,
+    "58820923:ToDefense": 7.4359580733634409,
+    "71039903:ToAttack": -3.1734668573119871
+  },
+  "ActionCounts": {
+    "79814787:Summon": 4058,
+    "87025064:Activate": 1765,
+    "59822133:SpSummon": 5205,
+    "8240199:Summon": 3481,
+    "38517737:SpSummon": 4345,
+    "63767246:SpSummon": 1905,
+    "45467446:Summon": 746,
+    "71039903:Summon": 4994,
+    "6853254:Activate": 1,
+    "63767246:Activate": 4,
+    "71039903:Activate": 3,
+    "40908371:ToAttack": 2599,
+    "45467446:ToDefense": 129,
+    "89631139:Summon": 1804,
+    "63422098:SpSummon": 22,
+    "18144506:Activate": 339,
+    "63767246:ToDefense": 632,
+    "45467446:Activate": 2,
+    "89631139:ToDefense": 532,
+    "59822133:ToDefense": 38,
+    "71039903:ToDefense": 92,
+    "33909817:SpSummon": 722,
+    "33909817:ToDefense": 135,
+    "2530830:SpSummon": 134,
+    "18963306:SpSummon": 40,
+    "39030163:SpSummon": 38,
+    "2530830:ToDefense": 7,
+    "59822133:Activate": 3,
+    "8240199:ToDefense": 7,
+    "38517737:ToDefense": 104,
+    "79814787:ToDefense": 54,
+    "31801517:SpSummon": 12,
+    "8240199:ToAttack": 5,
+    "33909817:ToAttack": 4,
+    "38517737:ToAttack": 1,
+    "59822133:ToAttack": 12,
+    "63767246:ToAttack": 6,
+    "40908371:ToDefense": 9,
+    "58820923:SpSummon": 9,
+    "31801517:ToDefense": 2,
+    "63422098:ToDefense": 44,
+    "31801517:ToAttack": 1,
+    "58820923:ToDefense": 1,
+    "71039903:ToAttack": 1
+  },
+  "CardStats": {
+    "79814787": {
+      "TotalUses": 4111,
+      "SuccessfulUses": 1466,
+      "FailedUses": 2564,
+      "AverageReward": -3.3600000000000003,
+      "RecentRewards": [
+        -9.0,
+        -12.75,
+        1.0,
+        1.15,
+        2.0,
+        -5.0,
+        4.5,
+        -5.5,
+        -0.5,
+        -9.5
+      ]
+    },
+    "87025064": {
+      "TotalUses": 1765,
+      "SuccessfulUses": 1131,
+      "FailedUses": 601,
+      "AverageReward": -0.65999999999999992,
+      "RecentRewards": [
+        0.0,
+        4.0,
+        -1.5,
+        2.5,
+        2.5,
+        -1.5,
+        -18.75,
+        9.5,
+        -1.35,
+        -2.0
+      ]
+    },
+    "59822133": {
+      "TotalUses": 5257,
+      "SuccessfulUses": 2646,
+      "FailedUses": 2540,
+      "AverageReward": -2.85,
+      "RecentRewards": [
+        9.5,
+        -9.0,
+        -5.5,
+        -15.5,
+        -0.5,
+        -4.5,
+        6.5,
+        -9.5,
+        -2.0,
+        2.0
+      ]
+    },
+    "8240199": {
+      "TotalUses": 3493,
+      "SuccessfulUses": 1938,
+      "FailedUses": 1486,
+      "AverageReward": -2.55,
+      "RecentRewards": [
+        3.5,
+        1.0,
+        -9.5,
+        -15.5,
+        -7.5,
+        -6.0,
+        2.0,
+        2.0,
+        6.5,
+        -2.0
+      ]
+    },
+    "38517737": {
+      "TotalUses": 4450,
+      "SuccessfulUses": 2326,
+      "FailedUses": 2073,
+      "AverageReward": -2.3,
+      "RecentRewards": [
+        9.5,
+        1.0,
+        -7.5,
+        1.0,
+        -5.5,
+        -0.5,
+        -4.5,
+        -13.5,
+        6.5,
+        -9.5
+      ]
+    },
+    "63767246": {
+      "TotalUses": 2546,
+      "SuccessfulUses": 949,
+      "FailedUses": 1453,
+      "AverageReward": -5.305,
+      "RecentRewards": [
+        -13.0,
+        -20.5,
+        -20.5,
+        -2.0,
+        2.0,
+        1.0,
+        1.15,
+        1.0,
+        -13.5,
+        11.3
+      ]
+    },
+    "45467446": {
+      "TotalUses": 877,
+      "SuccessfulUses": 238,
+      "FailedUses": 608,
+      "AverageReward": -9.645,
+      "RecentRewards": [
+        -3.55,
+        7.25,
+        -9.8,
+        -19.2,
+        -19.2,
+        -2.5,
+        -6.45,
+        -11.25,
+        -13.0,
+        -18.75
+      ]
+    },
+    "71039903": {
+      "TotalUses": 5090,
+      "SuccessfulUses": 2145,
+      "FailedUses": 2844,
+      "AverageReward": -2.495,
+      "RecentRewards": [
+        1.0,
+        -9.0,
+        0.0,
+        0.0,
+        -8.5,
+        -4.5,
+        -6.5,
+        -10.75,
+        2.0,
+        11.3
+      ]
+    },
+    "6853254": {
+      "TotalUses": 1,
+      "SuccessfulUses": 0,
+      "FailedUses": 1,
+      "AverageReward": -16.75,
+      "RecentRewards": [
+        -16.75
+      ]
+    },
+    "40908371": {
+      "TotalUses": 2608,
+      "SuccessfulUses": 1110,
+      "FailedUses": 1422,
+      "AverageReward": 3.72,
+      "RecentRewards": [
+        -7.0,
+        -12.5,
+        -6.5,
+        8.0,
+        8.0,
+        2.0,
+        11.3,
+        11.3,
+        11.3,
+        11.3
+      ]
+    },
+    "89631139": {
+      "TotalUses": 2336,
+      "SuccessfulUses": 617,
+      "FailedUses": 1654,
+      "AverageReward": -3.815,
+      "RecentRewards": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        -10.8,
+        -1.35,
+        -7.0,
+        -7.5,
+        -13.5,
+        -2.0
+      ]
+    },
+    "63422098": {
+      "TotalUses": 66,
+      "SuccessfulUses": 8,
+      "FailedUses": 55,
+      "AverageReward": -25.7,
+      "RecentRewards": [
+        -26.6,
+        -26.6,
+        -25.1,
+        -25.1,
+        -25.1,
+        -25.1,
+        -26.6,
+        -26.6,
+        -25.1,
+        -25.1
+      ]
+    },
+    "18144506": {
+      "TotalUses": 339,
+      "SuccessfulUses": 123,
+      "FailedUses": 209,
+      "AverageReward": -2.75,
+      "RecentRewards": [
+        -6.0,
+        -12.75,
+        6.0,
+        -11.5,
+        0.5,
+        0.5,
+        -0.75,
+        -10.0,
+        -2.0,
+        8.5
+      ]
+    },
+    "33909817": {
+      "TotalUses": 861,
+      "SuccessfulUses": 427,
+      "FailedUses": 407,
+      "AverageReward": -4.95,
+      "RecentRewards": [
+        4.5,
+        -4.0,
+        -4.0,
+        -8.5,
+        0.0,
+        -14.5,
+        -12.5,
+        -9.0,
+        4.5,
+        -6.0
+      ]
+    },
+    "2530830": {
+      "TotalUses": 140,
+      "SuccessfulUses": 25,
+      "FailedUses": 106,
+      "AverageReward": -8.23,
+      "RecentRewards": [
+        -5.8,
+        -22.4,
+        4.5,
+        -6.05,
+        -4.05,
+        -12.0,
+        -16.0,
+        -6.5,
+        -11.2,
+        -2.8
+      ]
+    },
+    "18963306": {
+      "TotalUses": 40,
+      "SuccessfulUses": 9,
+      "FailedUses": 25,
+      "AverageReward": -3.075,
+      "RecentRewards": [
+        8.35,
+        0.0,
+        -5.5,
+        4.9,
+        -15.2,
+        0.0,
+        -3.9,
+        -2.1500000000000004,
+        -6.05,
+        -11.2
+      ]
+    },
+    "39030163": {
+      "TotalUses": 38,
+      "SuccessfulUses": 9,
+      "FailedUses": 24,
+      "AverageReward": -3.075,
+      "RecentRewards": [
+        8.35,
+        0.0,
+        -5.5,
+        4.9,
+        -15.2,
+        0.0,
+        -3.9,
+        -2.1500000000000004,
+        -6.05,
+        -11.2
+      ]
+    },
+    "31801517": {
+      "TotalUses": 15,
+      "SuccessfulUses": 4,
+      "FailedUses": 8,
+      "AverageReward": -5.95,
+      "RecentRewards": [
+        0.0,
+        -8.9,
+        -5.3,
+        -17.7,
+        -14.0,
+        -9.4,
+        0.0,
+        0.5,
+        -4.7,
+        0.0
+      ]
+    },
+    "58820923": {
+      "TotalUses": 10,
+      "SuccessfulUses": 3,
+      "FailedUses": 4,
+      "AverageReward": -1.7850000000000001,
+      "RecentRewards": [
+        9.0,
+        -8.9,
+        0.0,
+        -5.3,
+        -17.7,
+        0.5,
+        0.0,
+        -4.1,
+        8.65,
+        0.0
+      ]
+    }
+  },
+  "TotalGameCount": 1115,
+  "LastUpdated": "4/8/2025 12:27:21 PM"
+}

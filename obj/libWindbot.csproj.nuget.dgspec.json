@@ -1,0 +1,80 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj",
+        "projectName": "ExecutorBase",
+        "projectPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj",
+        "UsingMicrosoftNETSdk": false,
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {}
+      }
+    },
+    "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj",
+        "projectName": "libWindbot",
+        "projectPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj",
+        "packagesPath": "C:\\Users\\zeak6\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "UsingMicrosoftNETSdk": false,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\zeak6\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "monoandroid71"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "monoandroid71": {
+            "projectReferences": {
+              "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj": {
+                "projectPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj"
+              }
+            }
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "monoandroid71": {
+          "dependencies": {
+            "Embeddinator-4000": {
+              "target": "Package",
+              "version": "[0.4.0, )"
+            },
+            "Xamarin.Android.Support.v7.AppCompat": {
+              "target": "Package",
+              "version": "[25.4.0.2, )"
+            }
+          }
+        }
+      }
+    }
+  }
+}

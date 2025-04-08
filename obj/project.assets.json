@@ -1,0 +1,812 @@
+{
+  "version": 3,
+  "targets": {
+    "MonoAndroid,Version=v7.1": {
+      "Embeddinator-4000/0.4.0": {
+        "type": "package"
+      },
+      "Xamarin.Android.Support.Animated.Vector.Drawable/25.4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Android.Support.Vector.Drawable": "[25.4.0.2]"
+        },
+        "compile": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Animated.Vector.Drawable.dll": {}
+        },
+        "runtime": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Animated.Vector.Drawable.dll": {}
+        },
+        "build": {
+          "build/MonoAndroid70/Xamarin.Android.Support.Animated.Vector.Drawable.targets": {}
+        }
+      },
+      "Xamarin.Android.Support.Annotations/25.4.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Annotations.dll": {}
+        },
+        "runtime": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Annotations.dll": {}
+        }
+      },
+      "Xamarin.Android.Support.Compat/25.4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Android.Support.Annotations": "[25.4.0.2]"
+        },
+        "compile": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Compat.dll": {}
+        },
+        "runtime": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Compat.dll": {}
+        },
+        "build": {
+          "build/MonoAndroid70/Xamarin.Android.Support.Compat.targets": {}
+        }
+      },
+      "Xamarin.Android.Support.Core.UI/25.4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Android.Support.Compat": "[25.4.0.2]"
+        },
+        "compile": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Core.UI.dll": {}
+        },
+        "runtime": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Core.UI.dll": {}
+        },
+        "build": {
+          "build/MonoAndroid70/Xamarin.Android.Support.Core.UI.targets": {}
+        }
+      },
+      "Xamarin.Android.Support.Core.Utils/25.4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Android.Support.Compat": "[25.4.0.2]"
+        },
+        "compile": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Core.Utils.dll": {}
+        },
+        "runtime": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Core.Utils.dll": {}
+        },
+        "build": {
+          "build/MonoAndroid70/Xamarin.Android.Support.Core.Utils.targets": {}
+        }
+      },
+      "Xamarin.Android.Support.Fragment/25.4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Android.Support.Compat": "[25.4.0.2]",
+          "Xamarin.Android.Support.Core.UI": "[25.4.0.2]",
+          "Xamarin.Android.Support.Core.Utils": "[25.4.0.2]",
+          "Xamarin.Android.Support.Media.Compat": "[25.4.0.2]"
+        },
+        "compile": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Fragment.dll": {}
+        },
+        "runtime": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Fragment.dll": {}
+        },
+        "build": {
+          "build/MonoAndroid70/Xamarin.Android.Support.Fragment.targets": {}
+        }
+      },
+      "Xamarin.Android.Support.Media.Compat/25.4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Android.Support.Compat": "[25.4.0.2]"
+        },
+        "compile": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Media.Compat.dll": {}
+        },
+        "runtime": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Media.Compat.dll": {}
+        },
+        "build": {
+          "build/MonoAndroid70/Xamarin.Android.Support.Media.Compat.targets": {}
+        }
+      },
+      "Xamarin.Android.Support.v7.AppCompat/25.4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Android.Support.Animated.Vector.Drawable": "[25.4.0.2]",
+          "Xamarin.Android.Support.Compat": "[25.4.0.2]",
+          "Xamarin.Android.Support.Core.UI": "[25.4.0.2]",
+          "Xamarin.Android.Support.Core.Utils": "[25.4.0.2]",
+          "Xamarin.Android.Support.Fragment": "[25.4.0.2]",
+          "Xamarin.Android.Support.Media.Compat": "[25.4.0.2]",
+          "Xamarin.Android.Support.Vector.Drawable": "[25.4.0.2]"
+        },
+        "compile": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.v7.AppCompat.dll": {}
+        },
+        "runtime": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.v7.AppCompat.dll": {}
+        },
+        "build": {
+          "build/MonoAndroid70/Xamarin.Android.Support.v7.AppCompat.targets": {}
+        }
+      },
+      "Xamarin.Android.Support.Vector.Drawable/25.4.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Xamarin.Android.Support.Compat": "[25.4.0.2]"
+        },
+        "compile": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Vector.Drawable.dll": {}
+        },
+        "runtime": {
+          "lib/MonoAndroid70/Xamarin.Android.Support.Vector.Drawable.dll": {}
+        },
+        "build": {
+          "build/MonoAndroid70/Xamarin.Android.Support.Vector.Drawable.targets": {}
+        }
+      },
+      "ExecutorBase/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/ExecutorBase.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ExecutorBase.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Embeddinator-4000/0.4.0": {
+      "sha512": "jZG0HrzglodoIPPM/jN1D4KSh6m/HVQ6fTFPzbCKZoQfogAwaIqUloW1I9ftruu3fL2EYlnAanort4THUFv6Cg==",
+      "type": "package",
+      "path": "embeddinator-4000/0.4.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "embeddinator-4000.0.4.0.nupkg.sha512",
+        "embeddinator-4000.nuspec",
+        "external/Xamarin.Android/include/Consts.cs",
+        "external/Xamarin.Android/include/arm64-v8a/eglib/config.h",
+        "external/Xamarin.Android/include/arm64-v8a/eglib/eglib-config.h",
+        "external/Xamarin.Android/include/armeabi-v7a/eglib/config.h",
+        "external/Xamarin.Android/include/armeabi-v7a/eglib/eglib-config.h",
+        "external/Xamarin.Android/include/armeabi/eglib/config.h",
+        "external/Xamarin.Android/include/armeabi/eglib/eglib-config.h",
+        "external/Xamarin.Android/include/config.h",
+        "external/Xamarin.Android/include/host-Darwin/eglib/config.h",
+        "external/Xamarin.Android/include/host-Darwin/eglib/eglib-config.h",
+        "external/Xamarin.Android/include/host-mxe-Win64/eglib/config.h",
+        "external/Xamarin.Android/include/host-mxe-Win64/eglib/eglib-config.h",
+        "external/Xamarin.Android/include/x86/eglib/config.h",
+        "external/Xamarin.Android/include/x86/eglib/eglib-config.h",
+        "external/Xamarin.Android/include/x86_64/eglib/config.h",
+        "external/Xamarin.Android/include/x86_64/eglib/eglib-config.h",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/Microsoft.Win32.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/Microsoft.Win32.Registry.AccessControl.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/Microsoft.Win32.Registry.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.AppContext.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Collections.Concurrent.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Collections.NonGeneric.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Collections.Specialized.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Collections.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ComponentModel.Annotations.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ComponentModel.EventBasedAsync.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ComponentModel.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ComponentModel.TypeConverter.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ComponentModel.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Console.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Data.Common.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Data.SqlClient.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.Contracts.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.Debug.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.FileVersionInfo.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.Process.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.StackTrace.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.TextWriterTraceListener.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.Tools.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.TraceEvent.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.TraceSource.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Diagnostics.Tracing.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Drawing.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Dynamic.Runtime.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Globalization.Calendars.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Globalization.Extensions.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Globalization.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.Compression.ZipFile.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.FileSystem.AccessControl.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.FileSystem.DriveInfo.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.FileSystem.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.FileSystem.Watcher.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.FileSystem.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.IsolatedStorage.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.MemoryMappedFiles.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.Pipes.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.UnmanagedMemoryStream.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.IO.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Linq.Expressions.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Linq.Parallel.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Linq.Queryable.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Linq.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.AuthenticationManager.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.Cache.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.HttpListener.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.Mail.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.NameResolution.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.NetworkInformation.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.Ping.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.Requests.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.Security.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.ServicePoint.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.Sockets.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.Utilities.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.WebHeaderCollection.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.WebSockets.Client.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Net.WebSockets.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ObjectModel.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Reflection.DispatchProxy.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Reflection.Emit.ILGeneration.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Reflection.Emit.Lightweight.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Reflection.Emit.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Reflection.Extensions.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Reflection.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Reflection.TypeExtensions.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Reflection.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Resources.ReaderWriter.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Resources.ResourceManager.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.CompilerServices.VisualC.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.Extensions.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.Handles.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.InteropServices.RuntimeInformation.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.InteropServices.WindowsRuntime.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.InteropServices.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.Loader.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.Numerics.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.Serialization.Formatters.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.Serialization.Json.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.Serialization.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.Serialization.Xml.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Runtime.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.AccessControl.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Claims.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Algorithms.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Cng.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Csp.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.DeriveBytes.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Encoding.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Encryption.Aes.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Encryption.ECDiffieHellman.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Encryption.ECDsa.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Encryption.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Hashing.Algorithms.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Hashing.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.OpenSsl.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Pkcs.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.ProtectedData.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.RSA.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.RandomNumberGenerator.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Cryptography.X509Certificates.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Principal.Windows.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.Principal.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Security.SecureString.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ServiceModel.Duplex.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ServiceModel.Http.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ServiceModel.NetTcp.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ServiceModel.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ServiceModel.Security.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ServiceProcess.ServiceController.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Text.Encoding.CodePages.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Text.Encoding.Extensions.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Text.Encoding.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Text.RegularExpressions.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Threading.AccessControl.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Threading.Overlapped.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Threading.Tasks.Parallel.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Threading.Tasks.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Threading.Thread.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Threading.ThreadPool.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Threading.Timer.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Threading.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.ValueTuple.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Xml.ReaderWriter.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Xml.XDocument.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Xml.XPath.XDocument.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Xml.XPath.XmlDocument.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Xml.XPath.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Xml.XmlDocument.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Xml.XmlSerializer.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/System.Xml.Xsl.Primitives.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Facades/netstandard.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.CJK.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.CJK.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.MidEast.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.MidEast.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.Other.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.Other.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.Rare.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.Rare.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.West.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.West.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/I18N.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Java.Interop.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Microsoft.CSharp.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Microsoft.CSharp.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.Btls.Interface.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.Btls.Interface.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.CSharp.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.CSharp.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.CompilerServices.SymbolWriter.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.CompilerServices.SymbolWriter.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.Data.Sqlite.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.Data.Sqlite.dll.config",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.Data.Tds.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.Data.Tds.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.Posix.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.Security.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Mono.Security.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/RedistList/FrameworkList.xml",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ComponentModel.Composition.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ComponentModel.Composition.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ComponentModel.DataAnnotations.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ComponentModel.DataAnnotations.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Core.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Core.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Data.Services.Client.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Data.Services.Client.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Data.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Data.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.EnterpriseServices.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.IO.Compression.FileSystem.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.IO.Compression.FileSystem.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.IO.Compression.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.IO.Compression.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.IdentityModel.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.IdentityModel.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Json.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Json.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Net.Http.WinHttpHandler.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Net.Http.WinHttpHandler.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Net.Http.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Net.Http.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Net.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Net.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Numerics.Vectors.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Numerics.Vectors.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Numerics.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Numerics.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Reflection.Context.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Reflection.Context.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Runtime.Serialization.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Runtime.Serialization.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Security.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Security.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ServiceModel.Internals.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ServiceModel.Internals.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ServiceModel.Web.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ServiceModel.Web.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ServiceModel.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.ServiceModel.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Transactions.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Transactions.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Web.Services.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Web.Services.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Windows.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Xml.Linq.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Xml.Linq.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Xml.Serialization.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Xml.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.Xml.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/System.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Xamarin.Android.NUnitLite.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/Xamarin.Android.NUnitLite.xml",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/libZipSharp.dll.config",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/libzip.3.0.dylib",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/mscorlib.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v1.0/mscorlib.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/Mono.Android.Export.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/Mono.Android.Export.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/Mono.Android.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/Mono.Android.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/OpenTK-1.0.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/OpenTK-1.0.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/OpenTK-1.0.xml",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/RedistList/FrameworkList.xml",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/mono.android.dex",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v2.3/mono.android.jar",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v7.0/Mono.Android.dll",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v7.0/Mono.Android.pdb",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v7.0/RedistList/FrameworkList.xml",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v7.0/mono.android.dex",
+        "external/Xamarin.Android/lib/xbuild-frameworks/MonoAndroid/v7.0/mono.android.jar",
+        "external/Xamarin.Android/lib/xbuild/Novell/MonoDroid.FSharp.targets",
+        "external/Xamarin.Android/lib/xbuild/Novell/Novell.MonoDroid.CSharp.targets",
+        "external/Xamarin.Android/lib/xbuild/Novell/Novell.MonoDroid.Common.targets",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/FSharp.Compiler.CodeDom.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Irony.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Java.Interop.Tools.Cecil.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Java.Interop.Tools.Cecil.pdb",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Java.Interop.Tools.Diagnostics.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Java.Interop.Tools.Diagnostics.pdb",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Java.Interop.Tools.JavaCallableWrappers.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Java.Interop.Tools.JavaCallableWrappers.pdb",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Version",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Version.commit",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Version.rev",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Version.txt",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Analysis.targets",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Bindings.targets",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Build.Tasks.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Build.Utilities.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Build.Utilities.pdb",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.CSharp.targets",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Cecil.Mdb.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Cecil.Mdb.pdb",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Cecil.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Cecil.pdb",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Common.props",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Common.targets",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.FSharp.targets",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.PCLSupport.targets",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Tools.Aidl.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Tools.Bytecode.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.Tools.Bytecode.pdb",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/Xamarin.Android.VisualBasic.targets",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libMonoPosixHelper.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libMonoPosixHelper.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmono-android.debug.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmono-android.debug.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmono-android.release.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmono-android.release.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmono-btls-shared.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmono-btls-shared.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmono-profiler-log.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmono-profiler-log.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmonosgen-2.0.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/arm64-v8a/libmonosgen-2.0.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libMonoPosixHelper.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libMonoPosixHelper.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmono-android.debug.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmono-android.debug.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmono-android.release.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmono-android.release.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmono-btls-shared.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmono-btls-shared.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmono-profiler-log.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmono-profiler-log.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmonosgen-2.0.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi-v7a/libmonosgen-2.0.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libMonoPosixHelper.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libMonoPosixHelper.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmono-android.debug.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmono-android.debug.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmono-android.release.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmono-android.release.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmono-btls-shared.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmono-btls-shared.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmono-profiler-log.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmono-profiler-log.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmonosgen-2.0.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/armeabi/libmonosgen-2.0.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libMonoPosixHelper.d.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libMonoPosixHelper.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-android.debug.d.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-android.debug.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-android.debug.dylib.dSYM/Contents/Info.plist",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-android.debug.dylib.dSYM/Contents/Resources/DWARF/libmono-android.debug.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-android.release.d.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-android.release.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-android.release.dylib.dSYM/Contents/Info.plist",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-android.release.dylib.dSYM/Contents/Resources/DWARF/libmono-android.release.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-profiler-log.d.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmono-profiler-log.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmonosgen-2.0.d.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-Darwin/libmonosgen-2.0.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-mxe-Win64/libMonoPosixHelper.d.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-mxe-Win64/libMonoPosixHelper.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-mxe-Win64/libmono-android.debug.d.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-mxe-Win64/libmono-android.debug.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-mxe-Win64/libmono-android.release.d.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-mxe-Win64/libmono-android.release.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-mxe-Win64/libmonosgen-2.0.d.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/host-mxe-Win64/libmonosgen-2.0.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libMonoPosixHelper.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libMonoPosixHelper.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmono-android.debug.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmono-android.debug.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmono-android.release.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmono-android.release.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmono-btls-shared.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmono-btls-shared.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmono-profiler-log.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmono-profiler-log.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmonosgen-2.0.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86/libmonosgen-2.0.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libMonoPosixHelper.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libMonoPosixHelper.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmono-android.debug.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmono-android.debug.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmono-android.release.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmono-android.release.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmono-btls-shared.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmono-btls-shared.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmono-profiler-log.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmono-profiler-log.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmonosgen-2.0.d.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/lib/x86_64/libmonosgen-2.0.so",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/libZipSharp.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/libZipSharp.dll.config",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/libzip.3.0.dylib",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/libzip.dll",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/updateinfo.dat",
+        "external/Xamarin.Android/lib/xbuild/Xamarin/Android/x64/libzip.dll",
+        "external/jna/README.md",
+        "external/jna/android-aarch64.jar",
+        "external/jna/android-arm.jar",
+        "external/jna/android-armv7.jar",
+        "external/jna/android-x86-64.jar",
+        "external/jna/android-x86.jar",
+        "external/jna/jna-4.4.0.jar",
+        "support/c-support.c",
+        "support/c-support.h",
+        "support/embeddinator.h",
+        "support/glib.c",
+        "support/glib.h",
+        "support/java/Decimal.java",
+        "support/java/DesktopImpl.java",
+        "support/java/GString.java",
+        "support/java/NullRefParameterException.java",
+        "support/java/Obj.java",
+        "support/java/Out.java",
+        "support/java/Ref.java",
+        "support/java/Runtime.java",
+        "support/java/RuntimeException.java",
+        "support/java/UnsignedByte.java",
+        "support/java/UnsignedInt.java",
+        "support/java/UnsignedLong.java",
+        "support/java/UnsignedShort.java",
+        "support/java/Utilities.java",
+        "support/java/android/AndroidImpl.java",
+        "support/java/android/AndroidRuntimeProvider.java",
+        "support/java/android/MonoPackageManager.java",
+        "support/mono-support.c",
+        "support/mono-support.h",
+        "support/mono_embeddinator.c",
+        "support/mono_embeddinator.h",
+        "support/objc-support.h",
+        "support/objc-support.m",
+        "tools/CppSharp.AST.dll",
+        "tools/CppSharp.AST.pdb",
+        "tools/CppSharp.Generator.dll",
+        "tools/CppSharp.Generator.pdb",
+        "tools/CppSharp.Parser.CSharp.dll",
+        "tools/CppSharp.Parser.CSharp.pdb",
+        "tools/CppSharp.Parser.dll",
+        "tools/CppSharp.Parser.pdb",
+        "tools/CppSharp.Runtime.dll",
+        "tools/CppSharp.Runtime.pdb",
+        "tools/CppSharp.dll",
+        "tools/CppSharp.pdb",
+        "tools/Embeddinator-4000.exe",
+        "tools/Embeddinator-4000.pdb",
+        "tools/IKVM.Reflection.dll",
+        "tools/IKVM.Reflection.pdb",
+        "tools/Microsoft.VisualStudio.Setup.Configuration.Interop.dll",
+        "tools/Mono.Cecil.Mdb.dll",
+        "tools/Mono.Cecil.Pdb.dll",
+        "tools/Mono.Cecil.Rocks.dll",
+        "tools/Mono.Cecil.dll",
+        "tools/Mono.Options.dll",
+        "tools/Xamarin.Android.Tools.dll",
+        "tools/Xamarin.Android.Tools.pdb",
+        "tools/Xamarin.MacDev.dll",
+        "tools/Xamarin.MacDev.pdb",
+        "tools/objcgen",
+        "tools/objcgen.exe",
+        "tools/objcgen.pdb"
+      ]
+    },
+    "Xamarin.Android.Support.Animated.Vector.Drawable/25.4.0.2": {
+      "sha512": "SaSUvYnc6ntGD/Rvo8O+Ks1yS5hgMFUPfPIEsBC337weZzyIeInKQJHt2myxCEER/5UutmBPlptlbn9Yki21RA==",
+      "type": "package",
+      "path": "xamarin.android.support.animated.vector.drawable/25.4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/MonoAndroid70/Xamarin.Android.Support.Animated.Vector.Drawable.targets",
+        "lib/MonoAndroid70/Xamarin.Android.Support.Animated.Vector.Drawable.dll",
+        "proguard/proguard.txt",
+        "xamarin.android.support.animated.vector.drawable.25.4.0.2.nupkg.sha512",
+        "xamarin.android.support.animated.vector.drawable.nuspec"
+      ]
+    },
+    "Xamarin.Android.Support.Annotations/25.4.0.2": {
+      "sha512": "4Gkj6OCOJO7jn4drGZxeCCaEVHOjUu0RzsEzZaAZJzrLNqEHqoYrKwIlbsecfEpjbAcyT77Sb8wkZnZNFPdlaA==",
+      "type": "package",
+      "path": "xamarin.android.support.annotations/25.4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "lib/MonoAndroid70/Xamarin.Android.Support.Annotations.dll",
+        "xamarin.android.support.annotations.25.4.0.2.nupkg.sha512",
+        "xamarin.android.support.annotations.nuspec"
+      ]
+    },
+    "Xamarin.Android.Support.Compat/25.4.0.2": {
+      "sha512": "k+bZ2ArXV7x1U5xomEiCVRoWHAWr6VKhF6Ziqd1DdK4ZZ4W+J0Dsi5oR2QcQHhIodb7j7cfuDcBAEs0KYvOmuQ==",
+      "type": "package",
+      "path": "xamarin.android.support.compat/25.4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/MonoAndroid70/Xamarin.Android.Support.Compat.targets",
+        "lib/MonoAndroid70/Xamarin.Android.Support.Compat.dll",
+        "xamarin.android.support.compat.25.4.0.2.nupkg.sha512",
+        "xamarin.android.support.compat.nuspec"
+      ]
+    },
+    "Xamarin.Android.Support.Core.UI/25.4.0.2": {
+      "sha512": "RKU0D2joAnk9bawGoS1/AGg+2CurKd4uK+ToYyueNN0iJTs3K/ZvnUGck8FGl6Iy8Hfy6NySv51ubMlFSXATuA==",
+      "type": "package",
+      "path": "xamarin.android.support.core.ui/25.4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/MonoAndroid70/Xamarin.Android.Support.Core.UI.targets",
+        "lib/MonoAndroid70/Xamarin.Android.Support.Core.UI.dll",
+        "proguard/proguard.txt",
+        "xamarin.android.support.core.ui.25.4.0.2.nupkg.sha512",
+        "xamarin.android.support.core.ui.nuspec"
+      ]
+    },
+    "Xamarin.Android.Support.Core.Utils/25.4.0.2": {
+      "sha512": "ZF+yk8b1WVRfgmf3MNeUOVdd9Bq3EoIYsXjCW2sAouwbNsnPKyjwL91mYyVcoT5f8Sf0SL866GnBtRi14wQesQ==",
+      "type": "package",
+      "path": "xamarin.android.support.core.utils/25.4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/MonoAndroid70/Xamarin.Android.Support.Core.Utils.targets",
+        "lib/MonoAndroid70/Xamarin.Android.Support.Core.Utils.dll",
+        "xamarin.android.support.core.utils.25.4.0.2.nupkg.sha512",
+        "xamarin.android.support.core.utils.nuspec"
+      ]
+    },
+    "Xamarin.Android.Support.Fragment/25.4.0.2": {
+      "sha512": "XBllQS9m18CvYj8Uzqr78p/9x2rUNOBMh/2PALayzXwhArCvXdE+pybzSi/+4jtcZc8w/06kWhqdXq/phrhBCw==",
+      "type": "package",
+      "path": "xamarin.android.support.fragment/25.4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/MonoAndroid70/Xamarin.Android.Support.Fragment.targets",
+        "lib/MonoAndroid70/Xamarin.Android.Support.Fragment.dll",
+        "xamarin.android.support.fragment.25.4.0.2.nupkg.sha512",
+        "xamarin.android.support.fragment.nuspec"
+      ]
+    },
+    "Xamarin.Android.Support.Media.Compat/25.4.0.2": {
+      "sha512": "cnjIL1GoLUifD1TA3QigOn9R3yKoidzahlS5GQHVYhO3AoZ5mknqWiZ7IbU9lVFVlMbVvI65ecSiG5j4T2ufCg==",
+      "type": "package",
+      "path": "xamarin.android.support.media.compat/25.4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/MonoAndroid70/Xamarin.Android.Support.Media.Compat.targets",
+        "lib/MonoAndroid70/Xamarin.Android.Support.Media.Compat.dll",
+        "xamarin.android.support.media.compat.25.4.0.2.nupkg.sha512",
+        "xamarin.android.support.media.compat.nuspec"
+      ]
+    },
+    "Xamarin.Android.Support.v7.AppCompat/25.4.0.2": {
+      "sha512": "A3P9Hpw8FAGuZISw3hYZE6OjJwjDRbvoEJvsey0ZXmBFI/j4w8YBlwN+SsQse1oEx1yzYAXQwnU/KIYEuHMkQw==",
+      "type": "package",
+      "path": "xamarin.android.support.v7.appcompat/25.4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/MonoAndroid70/Xamarin.Android.Support.v7.AppCompat.targets",
+        "lib/MonoAndroid70/Xamarin.Android.Support.v7.AppCompat.dll",
+        "xamarin.android.support.v7.appcompat.25.4.0.2.nupkg.sha512",
+        "xamarin.android.support.v7.appcompat.nuspec"
+      ]
+    },
+    "Xamarin.Android.Support.Vector.Drawable/25.4.0.2": {
+      "sha512": "2zAGVOqmuhp/QCvDFmXkqvx+cJ5sMHFsZuwvoPEkx6mDRDo5sfPJaQzfiODquCL6EIs/vwoW+vHOcdFRbl+TLg==",
+      "type": "package",
+      "path": "xamarin.android.support.vector.drawable/25.4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "THIRD-PARTY-NOTICES.txt",
+        "build/MonoAndroid70/Xamarin.Android.Support.Tasks.VectorDrawable.dll",
+        "build/MonoAndroid70/Xamarin.Android.Support.Vector.Drawable.targets",
+        "lib/MonoAndroid70/Xamarin.Android.Support.Vector.Drawable.dll",
+        "xamarin.android.support.vector.drawable.25.4.0.2.nupkg.sha512",
+        "xamarin.android.support.vector.drawable.nuspec"
+      ]
+    },
+    "ExecutorBase/1.0.0": {
+      "type": "project",
+      "path": "ExecutorBase/ExecutorBase.csproj",
+      "msbuildProject": "ExecutorBase/ExecutorBase.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "MonoAndroid,Version=v7.1": [
+      "Embeddinator-4000 >= 0.4.0",
+      "ExecutorBase >= 1.0.0",
+      "Xamarin.Android.Support.v7.AppCompat >= 25.4.0.2"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\zeak6\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj",
+      "projectName": "libWindbot",
+      "projectPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj",
+      "packagesPath": "C:\\Users\\zeak6\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\obj\\",
+      "projectStyle": "PackageReference",
+      "skipContentFileWrite": true,
+      "UsingMicrosoftNETSdk": false,
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\zeak6\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "monoandroid71"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "monoandroid71": {
+          "projectReferences": {
+            "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj": {
+              "projectPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj"
+            }
+          }
+        }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "monoandroid71": {
+        "dependencies": {
+          "Embeddinator-4000": {
+            "target": "Package",
+            "version": "[0.4.0, )"
+          },
+          "Xamarin.Android.Support.v7.AppCompat": {
+            "target": "Package",
+            "version": "[25.4.0.2, )"
+          }
+        }
+      }
+    }
+  }
+}
