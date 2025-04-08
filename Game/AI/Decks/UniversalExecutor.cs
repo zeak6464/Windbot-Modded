@@ -216,7 +216,7 @@ namespace WindBot.Game.AI.Decks
             public ReinforcementLearningSystem(string filePath)
             {
                 QLearningFilePath = filePath;
-                QValues = new Dictionary<int, Dictionary<string, double>>();
+                QValues = new Dictionary<int, Dictionary<string, double>>(); // Initialize QValues
                 LoadQValues();
             }
 
@@ -237,6 +237,13 @@ namespace WindBot.Game.AI.Decks
                             }
                         }
                     }
+                    
+                    // Add this check after loading
+                    if (QValues == null)
+                    {
+                        QValues = new Dictionary<int, Dictionary<string, double>>();
+                        Logger.DebugWriteLine("Initialized empty QValues dictionary");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -248,11 +255,14 @@ namespace WindBot.Game.AI.Decks
 
             public override void SaveQValues()
             {
-                if (!ValuesChanged)
-                    return;
-
                 try
                 {
+                    if (QValues == null)
+                    {
+                        QValues = new Dictionary<int, Dictionary<string, double>>();
+                        Logger.DebugWriteLine("Initialized empty QValues dictionary before saving");
+                    }
+                    
                     CardActionValueData data = new CardActionValueData
                     {
                         QValues = QValues,
@@ -288,6 +298,12 @@ namespace WindBot.Game.AI.Decks
 
             public void UpdateQValues(double reward)
             {
+                if (QValues == null)
+                {
+                    QValues = new Dictionary<int, Dictionary<string, double>>();
+                    Logger.DebugWriteLine("Initialized QValues dictionary during UpdateQValues");
+                }
+                
                 foreach (var entry in CardActionsThisTurn)
                 {
                     int cardId = entry.Key;
@@ -300,7 +316,7 @@ namespace WindBot.Game.AI.Decks
 
                     // Initialize Q-value for this action if needed
                     if (!QValues[cardId].ContainsKey(actionKey))
-                        QValues[cardId][actionKey] = 0.0;
+                        QValues[cardId][actionKey] = 2.0; // Use optimistic initialization to encourage exploration
 
                     // Track card reward
                     if (!CardAverageReward.ContainsKey(cardId))
@@ -553,7 +569,9 @@ namespace WindBot.Game.AI.Decks
                 string actionKey = action.ToString();
                 if (QValues.ContainsKey(cardId) && QValues[cardId].ContainsKey(actionKey))
                     return QValues[cardId][actionKey];
-                return 0.0; // Default value for unknown card/action pairs
+                
+                // Use optimistic initialization to encourage exploration of new cards
+                return 2.0; // Default value for unknown card/action pairs
             }
             
             public override void ProcessDuelEnd(bool won)
@@ -576,6 +594,63 @@ namespace WindBot.Game.AI.Decks
                     .Take(count)
                     .Select(kvp => kvp.Key)
                     .ToList();
+            }
+
+            // Add this method to the ReinforcementLearningSystem class
+            public void PenalizeNegatingOwnCards(int cardId)
+            {
+                string key = $"{cardId}:{ActionType.Activate}"; // Direct string format instead of GetActionKey
+                
+                if (!QValues.ContainsKey(cardId))
+                {
+                    QValues[cardId] = new Dictionary<string, double>();
+                }
+                
+                if (!QValues[cardId].ContainsKey(ActionType.Activate.ToString()))
+                {
+                    QValues[cardId][ActionType.Activate.ToString()] = 0.0;
+                }
+                
+                // Apply a strong negative reward
+                QValues[cardId][ActionType.Activate.ToString()] -= 20.0;
+                
+                // Track this as a failed use
+                if (!CardUsageCount.ContainsKey(cardId))
+                {
+                    CardUsageCount[cardId] = 0;
+                }
+                CardUsageCount[cardId]++;
+                
+                Logger.DebugWriteLine($"Applied negation penalty to {cardId}");
+                ValuesChanged = true;
+            }
+
+            // Add this method to the ReinforcementLearningSystem class
+            public void BoostCardActionValue(int cardId, ActionType actionType, double boost)
+            {
+                if (QValues == null)
+                {
+                    QValues = new Dictionary<int, Dictionary<string, double>>();
+                }
+                
+                string actionKey = actionType.ToString();
+                
+                // Initialize dictionaries if they don't exist
+                if (!QValues.ContainsKey(cardId))
+                {
+                    QValues[cardId] = new Dictionary<string, double>();
+                }
+                
+                if (!QValues[cardId].ContainsKey(actionKey))
+                {
+                    QValues[cardId][actionKey] = 0.0;
+                }
+                
+                // Apply the boost to the action value
+                QValues[cardId][actionKey] += boost;
+                
+                Logger.DebugWriteLine($"Boosted action value for card {cardId}, action {actionType} by {boost}");
+                ValuesChanged = true;
             }
         }
 
@@ -642,8 +717,10 @@ namespace WindBot.Game.AI.Decks
             string currentDirectory = System.IO.Directory.GetCurrentDirectory();
             CombosFilePath = Path.Combine(currentDirectory, "universal_combos.json");
             ComboScoresFilePath = Path.Combine(currentDirectory, "universal_combo_scores.json");
+            RLFilePath = Path.Combine(currentDirectory, "universal_rl_qvalues.json");
             
             Logger.DebugWriteLine($"Using combo files: {CombosFilePath} and {ComboScoresFilePath}");
+            Logger.DebugWriteLine($"Using RL data file: {RLFilePath}");
             
             // Try to load saved combo data
             LoadSavedComboData();
@@ -2430,6 +2507,17 @@ namespace WindBot.Game.AI.Decks
         {
             if (Card != null && RL != null)
             {
+                // Check if this is a negation card about to negate our own card
+                if (IsNegationCard(Card.Id))
+                {
+                    ClientCard lastChainCard = Util.GetLastChainCard();
+                    if (lastChainCard != null && lastChainCard.Controller == 0) // 0 = Bot's card
+                    {
+                        Logger.DebugWriteLine($"Preventing negation of our own card {lastChainCard.Id} by {Card.Id}");
+                        return false;
+                    }
+                }
+                
                 double actionValue = RL.GetCardActionValue(Card.Id, ActionType.Activate);
                 RL.TrackAction(Card.Id, ActionType.Activate);
                 
@@ -2448,6 +2536,21 @@ namespace WindBot.Game.AI.Decks
             
             // Default logic if RL has no strong opinion
             return Program.Rand.Next(10) >= 5 && DefaultDontChainMyself();
+        }
+
+        // Helper method to identify negation cards
+        private bool IsNegationCard(int cardId)
+        {
+            // Add known negation cards here
+            int[] negationCards = new[] {
+                78474168, // Breakthrough Skill
+                10045474, // Infinite Impermanence
+                97268402, // Effect Veiler
+                24224830  // Called by the Grave
+                // Add more negation cards as needed
+            };
+            
+            return negationCards.Contains(cardId);
         }
 
         // New method to analyze opponent's strategy in detail
@@ -2773,6 +2876,30 @@ namespace WindBot.Game.AI.Decks
                     }
                 }
             }
+            
+            // Add controller-based context
+            if (Duel.LastChainPlayer == 0) // If the last card in chain is our own
+            {
+                // Strongly discourage negation effects
+                foreach (int negationCardId in GetNegationCardIds())
+                {
+                    if (Bot.HasInHand(negationCardId) || Bot.HasInSpellZone(negationCardId))
+                    {
+                        RL.BoostCardActionValue(negationCardId, ActionType.Activate, -15.0);
+                    }
+                }
+            }
+        }
+
+        private List<int> GetNegationCardIds()
+        {
+            // Return a list of all negation card IDs
+            return new List<int> { 
+                78474168, // Breakthrough Skill
+                10045474, // Infinite Impermanence
+                97268402, // Effect Veiler
+                24224830  // Called by the Grave
+            };
         }
 
         // Helper method to check if a card can remove threats
@@ -2982,6 +3109,23 @@ namespace WindBot.Game.AI.Decks
                             Logger.DebugWriteLine($"Loaded RL data with {ActionValues.Count} action values and {TotalGameCount} total games");
                         }
                     }
+                    
+                    // Initialize empty collections if they're null
+                    if (ActionValues == null)
+                    {
+                        ActionValues = new Dictionary<string, double>();
+                        Logger.DebugWriteLine("Initialized empty ActionValues dictionary");
+                    }
+                    
+                    if (ActionCounts == null)
+                    {
+                        ActionCounts = new Dictionary<string, int>();
+                    }
+                    
+                    if (CardStats == null)
+                    {
+                        CardStats = new Dictionary<int, CardUsageStats>();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -3073,6 +3217,9 @@ namespace WindBot.Game.AI.Decks
                 // Apply a temporary boost to the action value
                 // This doesn't permanently change the learned values
                 ActionValues[key] += boost;
+                
+                Logger.DebugWriteLine($"Boosted action value for card {cardId}, action {actionType} by {boost}");
+                ValuesChanged = true;
             }
             
             // Start a new turn
@@ -3356,11 +3503,10 @@ namespace WindBot.Game.AI.Decks
         {
             base.OnNewTurn();
             
-            // Reset tracking for the new turn
-            CardsPlayedThisTurn.Clear();
-            OpponentCardsPlayedThisTurn.Clear();
+            // Perform analysis on opponent strategy
+            AnalyzeOpponentStrategy();
             
-            // Check if any combos were completed in the last turn
+            // Detect combos from the cards played so far
             DetectAndLearnCombos();
             
             // Reset life point tracking
@@ -3376,7 +3522,7 @@ namespace WindBot.Game.AI.Decks
                 SaveComboData();
             }
             
-            // Reinforcement Learning: End previous turn and start new one
+            // Start a new turn in the RL system
             if (RL != null)
             {
                 // First, learn from the previous turn results
@@ -3385,41 +3531,66 @@ namespace WindBot.Game.AI.Decks
                 // Then prepare for the new turn
                 RL.StartTurn(Bot, Enemy);
                 
-                // Check for high-valued cards in hand and provide hints
+                // Log high-value cards for debugging
                 LogHighValueCardsInHand();
+            }
+            
+            // Clear the list of cards played this turn
+            CardsPlayedThisTurn.Clear();
+            OpponentCardsPlayedThisTurn.Clear();
+            
+            // Initialize domain knowledge with card classifications if needed
+            if (!DomainKnowledgeInitialized)
+            {
+                BuildCardClassificationDictionary();
+                DomainKnowledgeInitialized = true;
+            }
+            
+            // Check if we need to load deck cards
+            if (!deckLoaded)
+            {
+                LoadDeckCards();
             }
             
             Logger.DebugWriteLine($"Turn {Duel.Turn}: New turn started. Bot LP: {Bot.LifePoints}, Enemy LP: {Enemy.LifePoints}");
         }
-
-        // Log information about high-value cards in hand
+        
+        // Log the RL values of cards in hand for debugging
         private void LogHighValueCardsInHand()
         {
-            if (Bot?.Hand == null) return;
+            if (RL == null || Bot.Hand.Count == 0) return;
             
-            Logger.DebugWriteLine($"Hand analysis (turn {Duel.Turn}):");
+            Logger.DebugWriteLine("----- Current Card RL Values -----");
             
             foreach (ClientCard card in Bot.Hand)
             {
                 if (card == null) continue;
                 
-                int score = EvaluateCardWithContext(card);
-                double rlValue = RL != null ? RL.GetCardActionValue(card.Id, ActionType.Activate) : 0;
+                // Get RL value for multiple action types
+                double activateValue = RL.GetCardActionValue(card.Id, ActionType.Activate);
+                double summonValue = RL.GetCardActionValue(card.Id, ActionType.Summon);
+                double setValueMonster = RL.GetCardActionValue(card.Id, ActionType.SetMonster);
+                double setValueSpellTrap = RL.GetCardActionValue(card.Id, ActionType.SetSpellTrap);
                 
-                Logger.DebugWriteLine($"Card {card.Id}: Score {score}, RL value {rlValue}");
+                // Get combo score
+                int comboScore = CardComboScores.ContainsKey(card.Id) ? CardComboScores[card.Id] : 0;
+                
+                // Log the values
+                Logger.DebugWriteLine($"Card {card.Id}: Combo Score {comboScore}, RL values: Activate={activateValue:F1}, Summon={summonValue:F1}, Set={setValueMonster:F1}/{setValueSpellTrap:F1}");
             }
             
-            // Get top performing cards from RL
-            if (RL != null)
+            // Also log a few key cards from deck for debugging
+            if (DeckCardIds.Count > 0)
             {
-                var topCards = RL.GetTopPerformingCards();
-                if (topCards.Count > 0)
+                Logger.DebugWriteLine("----- Key Deck Card Values -----");
+                List<int> keyCards = DeckCardIds.Take(Math.Min(5, DeckCardIds.Count)).ToList();
+                
+                foreach (int cardId in keyCards)
                 {
-                    Logger.DebugWriteLine("Top performing cards:");
-                    foreach (int cardId in topCards)
-                    {
-                        Logger.DebugWriteLine($"Card {cardId}");
-                    }
+                    double activateValue = RL.GetCardActionValue(cardId, ActionType.Activate);
+                    int comboScore = CardComboScores.ContainsKey(cardId) ? CardComboScores[cardId] : 0;
+                    
+                    Logger.DebugWriteLine($"Deck Card {cardId}: Score {comboScore}, RL value {activateValue:F1}");
                 }
             }
         }
