@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\",
+  "WorkspaceRootPath": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3E7FAF67-A27D-4A61-B161-93AD4414183E}|WindBot.csproj|c:\\users\\zeak6\\downloads\\windbot-master\\windbot-master\\game\\ai\\decks\\universalexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3E7FAF67-A27D-4A61-B161-93AD4414183E}|WindBot.csproj|c:\\users\\zeak6\\documents\\github\\windbot-modded\\game\\ai\\decks\\universalexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3E7FAF67-A27D-4A61-B161-93AD4414183E}|WindBot.csproj|solutionrelative:game\\ai\\decks\\universalexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -20,11 +20,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "UniversalExecutor.cs",
-              "DocumentMoniker": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\Game\\AI\\Decks\\UniversalExecutor.cs",
+              "DocumentMoniker": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\Game\\AI\\Decks\\UniversalExecutor.cs",
               "RelativeDocumentMoniker": "Game\\AI\\Decks\\UniversalExecutor.cs",
-              "ToolTip": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\Game\\AI\\Decks\\UniversalExecutor.cs",
+              "ToolTip": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\Game\\AI\\Decks\\UniversalExecutor.cs",
               "RelativeToolTip": "Game\\AI\\Decks\\UniversalExecutor.cs",
-              "ViewState": "AgIAAHEOAAAAAAAAAIAwwHkOAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAE4NAAAAAAAAAIAwwFYNAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-04T22:04:15.983Z",
               "EditorCaption": ""

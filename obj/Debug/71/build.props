@@ -25,11 +25,11 @@ androidgeneratejnimarshalmethods=false
 os=windows_nt
 androidincludedebugsymbols=true
 androidpackagenamingpolicy=lowercasecrc64
-_nugetassetstimestamp=638793863899660769
+_nugetassetstimestamp=638797226047123288
 typemapkind=strings-asm
 androidsupportedabis=arm64-v8a
 armeabi-v7a
 x86
 x86_64
 androidmanifestplaceholders=
-projectfullpath=c:\users\zeak6\downloads\windbot-master\windbot-master\libwindbot.csproj
+projectfullpath=c:\users\zeak6\documents\github\windbot-modded\libwindbot.csproj

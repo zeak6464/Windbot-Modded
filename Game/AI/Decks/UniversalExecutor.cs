@@ -115,14 +115,86 @@ namespace WindBot.Game.AI.Decks
             Tribute = 12
         }
 
-        private class ReinforcementLearningSystem
+        // 1. Define a common interface for reinforcement learning systems
+        public interface IReinforcementLearningSystem
+        {
+            void TrackAction(int cardId, ActionType actionType);
+            double GetCardActionValue(int cardId, ActionType actionType);
+            void CalculateRewards(ClientField bot, ClientField enemy, bool isDuelEnding = false);
+            void StartTurn(ClientField bot, ClientField enemy);
+            void EndTurn(ClientField bot, ClientField enemy);
+            void ProcessDuelEnd(bool won);
+            List<int> GetTopPerformingCards(int count = 5);
+            void SaveQValues();
+            void LoadQValues();
+            ActionType GetBestAction(int cardId, List<ActionType> availableActions);
+        }
+
+        // 2. Create a base class with common functionality
+        public abstract class ReinforcementLearningBase : IReinforcementLearningSystem
+        {
+            protected double BaseLearningRate = 0.3;
+            protected double MinLearningRate = 0.05;
+            protected Random Random = new Random();
+            protected bool ValuesChanged = false;
+            
+            // Common implementation for tracking current turn actions
+            protected List<string> CurrentTurnActions = new List<string>();
+            
+            // Common implementation for getting exploration rate
+            protected double GetCurrentExplorationRate(int totalActions, double baseRate, double minRate)
+            {
+                double decay = Math.Min(totalActions / 1000.0, 1.0);
+                return Math.Max(baseRate * (1 - decay), minRate);
+            }
+            
+            // Common reward calculation logic
+            protected double CalculateBaseReward(ClientField bot, ClientField enemy, int prevBotLP, int prevEnemyLP)
+            {
+                double reward = 0.0;
+                
+                // Life point changes
+                int enemyLPDiff = prevEnemyLP - enemy.LifePoints;
+                int botLPDiff = prevBotLP - bot.LifePoints;
+                
+                // Dealing damage reward
+                if (enemyLPDiff > 0)
+                {
+                    reward += Math.Min(20.0, enemyLPDiff / 200.0);
+                }
+                
+                // Taking damage penalty
+                if (botLPDiff > 0)
+                {
+                    reward -= Math.Min(25.0, botLPDiff / 150.0);
+                }
+                
+                // Field advantage
+                reward += (bot.GetMonsterCount() - enemy.GetMonsterCount()) * 1.5;
+                
+                return reward;
+            }
+            
+            // Abstract methods that must be implemented
+            public abstract void TrackAction(int cardId, ActionType actionType);
+            public abstract double GetCardActionValue(int cardId, ActionType actionType);
+            public abstract void CalculateRewards(ClientField bot, ClientField enemy, bool isDuelEnding = false);
+            public abstract void StartTurn(ClientField bot, ClientField enemy);
+            public abstract void EndTurn(ClientField bot, ClientField enemy);
+            public abstract void ProcessDuelEnd(bool won);
+            public abstract List<int> GetTopPerformingCards(int count = 5);
+            public abstract void SaveQValues();
+            public abstract void LoadQValues();
+            public abstract ActionType GetBestAction(int cardId, List<ActionType> availableActions);
+        }
+
+        private class ReinforcementLearningSystem : ReinforcementLearningBase
         {
             // Q-Learning parameters
-            private double LearningRate = 0.3;
             private double DiscountFactor = 0.9;
-            private double ExplorationRate = 0.2;
-            private Random Random = new Random();
-
+            private int TotalActions = 0;
+            private string QLearningFilePath;
+            
             // Q-Values storage
             private Dictionary<int, Dictionary<string, double>> QValues;
             
@@ -132,8 +204,14 @@ namespace WindBot.Game.AI.Decks
             private int PreviousBotLP = 8000;
             private int TurnStartEnemyCards = 0;
             private int TurnStartBotCards = 0;
-            private bool ValuesChanged = false;
-            private string QLearningFilePath;
+            
+            // Performance tracking
+            private Dictionary<int, int> CardSuccessCount = new Dictionary<int, int>();
+            private Dictionary<int, int> CardUsageCount = new Dictionary<int, int>();
+            private Dictionary<int, double> CardAverageReward = new Dictionary<int, double>();
+            
+            // Opponent tracking
+            private HashSet<int> OpponentCardsSeen = new HashSet<int>();
 
             public ReinforcementLearningSystem(string filePath)
             {
@@ -142,7 +220,7 @@ namespace WindBot.Game.AI.Decks
                 LoadQValues();
             }
 
-            public void LoadQValues()
+            public override void LoadQValues()
             {
                 try
                 {
@@ -168,7 +246,7 @@ namespace WindBot.Game.AI.Decks
                 }
             }
 
-            public void SaveQValues()
+            public override void SaveQValues()
             {
                 if (!ValuesChanged)
                     return;
@@ -192,12 +270,19 @@ namespace WindBot.Game.AI.Decks
                 }
             }
 
-            public void TrackAction(int cardId, ActionType action)
+            public override void TrackAction(int cardId, ActionType action)
             {
                 if (!CardActionsThisTurn.ContainsKey(cardId))
                 {
                     CardActionsThisTurn[cardId] = action;
-                    Logger.DebugWriteLine($"Tracked action: Card {cardId}, Action {action}");
+                    TotalActions++;
+                    
+                    // Track usage count
+                    if (!CardUsageCount.ContainsKey(cardId))
+                        CardUsageCount[cardId] = 0;
+                    CardUsageCount[cardId]++;
+                    
+                    Logger.DebugWriteLine($"Tracked action: Card {cardId}, Action {action}, Total actions: {TotalActions}");
                 }
             }
 
@@ -217,14 +302,33 @@ namespace WindBot.Game.AI.Decks
                     if (!QValues[cardId].ContainsKey(actionKey))
                         QValues[cardId][actionKey] = 0.0;
 
+                    // Track card reward
+                    if (!CardAverageReward.ContainsKey(cardId))
+                        CardAverageReward[cardId] = 0.0;
+                    
+                    // Update average reward using weighted average
+                    int usageCount = CardUsageCount.ContainsKey(cardId) ? CardUsageCount[cardId] : 1;
+                    CardAverageReward[cardId] = ((CardAverageReward[cardId] * (usageCount - 1)) + reward) / usageCount;
+
+                    // Track success if reward is positive
+                    if (reward > 0)
+                    {
+                        if (!CardSuccessCount.ContainsKey(cardId))
+                            CardSuccessCount[cardId] = 0;
+                        CardSuccessCount[cardId]++;
+                    }
+
+                    // Adaptive learning rate - decreases as we gain more experience with the card
+                    double learningRate = GetCurrentLearningRate(cardId);
+                    
                     // Q-Learning update formula: Q(s,a) = Q(s,a) + α * (r + γ * max(Q(s',a')) - Q(s,a))
                     double oldValue = QValues[cardId][actionKey];
                     double maxNextValue = 0.0; // For terminal state
 
-                    double newValue = oldValue + LearningRate * (reward + DiscountFactor * maxNextValue - oldValue);
+                    double newValue = oldValue + learningRate * (reward + DiscountFactor * maxNextValue - oldValue);
                     QValues[cardId][actionKey] = newValue;
 
-                    Logger.DebugWriteLine($"Updated Q-value for card {cardId}, action {actionKey}: {oldValue} -> {newValue}");
+                    Logger.DebugWriteLine($"Updated Q-value for card {cardId}, action {actionKey}: {oldValue} -> {newValue} (lr: {learningRate})");
                     ValuesChanged = true;
                 }
 
@@ -232,7 +336,21 @@ namespace WindBot.Game.AI.Decks
                 CardActionsThisTurn.Clear();
             }
 
-            public void CalculateRewards(ClientField bot, ClientField enemy, bool duelEnding = false)
+            private double GetCurrentLearningRate(int cardId)
+            {
+                // Adaptive learning rate that decreases with experience
+                int usageCount = CardUsageCount.ContainsKey(cardId) ? CardUsageCount[cardId] : 0;
+                double decay = Math.Min(usageCount / 50.0, 1.0); // Gradual decay based on usage
+                return Math.Max(BaseLearningRate * (1 - decay), MinLearningRate);
+            }
+
+            private double GetCurrentExplorationRate()
+            {
+                // Use the base class helper method with our total actions
+                return base.GetCurrentExplorationRate(TotalActions, 0.3, 0.05);
+            }
+
+            public override void CalculateRewards(ClientField bot, ClientField enemy, bool duelEnding = false)
             {
                 double reward = 0.0;
 
@@ -240,9 +358,15 @@ namespace WindBot.Game.AI.Decks
                 int enemyLPDiff = PreviousEnemyLP - enemy.LifePoints;
                 int botLPDiff = PreviousBotLP - bot.LifePoints;
                 
+                // Field presence
+                int botMonsterCount = bot.GetMonsterCount();
+                int enemyMonsterCount = enemy.GetMonsterCount();
+                int botSpellTrapCount = bot.GetSpellCount();
+                int enemySpellTrapCount = enemy.GetSpellCount();
+                
                 // Card advantage changes
-                int currentBotCards = bot.Hand.Count + bot.GetMonsterCount() + bot.GetSpellCount();
-                int currentEnemyCards = enemy.Hand.Count + enemy.GetMonsterCount() + enemy.GetSpellCount();
+                int currentBotCards = bot.Hand.Count + botMonsterCount + botSpellTrapCount;
+                int currentEnemyCards = enemy.Hand.Count + enemyMonsterCount + enemySpellTrapCount;
                 int botCardDiff = currentBotCards - TurnStartBotCards;
                 int enemyCardDiff = currentEnemyCards - TurnStartEnemyCards;
                 
@@ -250,33 +374,108 @@ namespace WindBot.Game.AI.Decks
                 if (duelEnding)
                 {
                     if (enemy.LifePoints <= 0)
-                        reward += 100.0; // Major reward for winning
+                        reward += 150.0; // Major reward for winning
                     else if (bot.LifePoints <= 0)
-                        reward -= 100.0; // Major penalty for losing
+                        reward -= 150.0; // Major penalty for losing
                 }
 
-                // Dealing damage
+                // Dealing damage - progressive reward based on damage amount
                 if (enemyLPDiff > 0)
-                    reward += enemyLPDiff / 1000.0; // 1 reward point per 1000 damage dealt
+                {
+                    double damageReward = 0;
+                    if (enemyLPDiff >= 4000) damageReward = 20.0;      // OTK-level damage
+                    else if (enemyLPDiff >= 2000) damageReward = 10.0; // Major damage
+                    else if (enemyLPDiff >= 1000) damageReward = 5.0;  // Significant damage
+                    else damageReward = enemyLPDiff / 200.0;           // Minor damage
+                    
+                    reward += damageReward;
+                    
+                    // Extra reward if enemy LP is now low
+                    if (enemy.LifePoints <= 2000)
+                        reward += 5.0;
+                }
 
-                // Taking damage
+                // Taking damage - progressive penalty
                 if (botLPDiff > 0)
-                    reward -= botLPDiff / 800.0; // 1.25 penalty points per 1000 damage taken
+                {
+                    double damagePenalty = 0;
+                    if (botLPDiff >= 4000) damagePenalty = 25.0;      // OTK-level damage
+                    else if (botLPDiff >= 2000) damagePenalty = 12.0; // Major damage
+                    else if (botLPDiff >= 1000) damagePenalty = 6.0;  // Significant damage
+                    else damagePenalty = botLPDiff / 150.0;           // Minor damage
+                    
+                    reward -= damagePenalty;
+                }
 
-                // Card advantage
-                reward += botCardDiff * 2.0; // Gaining cards is good
-                reward -= enemyCardDiff * 2.0; // Opponent gaining cards is bad
-
+                // Card advantage - refined with progressive rewards
+                if (botCardDiff > 0)
+                {
+                    reward += botCardDiff * 2.5; // Better reward for gaining cards
+                    
+                    // Extra reward for significant card advantage
+                    if (botCardDiff >= 3)
+                        reward += 5.0; // Bonus for strong card advantage
+                }
+                else if (botCardDiff < 0)
+                {
+                    reward += botCardDiff * 1.5; // Penalty for losing cards
+                }
+                
+                // Enemy card advantage
+                if (enemyCardDiff > 0)
+                {
+                    reward -= enemyCardDiff * 2.0; // Penalty for opponent gaining cards
+                    
+                    // Extra penalty for significant opponent advantage
+                    if (enemyCardDiff >= 3)
+                        reward -= 5.0;
+                }
+                
                 // Field presence (monsters)
-                reward += bot.GetMonsterCount() * 1.0;
-                reward -= enemy.GetMonsterCount() * 1.0;
+                reward += botMonsterCount * 1.5; // Increased reward for field presence
+                reward -= enemyMonsterCount * 1.5;
+                
+                // Field presence (spell/traps)
+                reward += botSpellTrapCount * 0.75;
+                reward -= enemySpellTrapCount * 0.75;
                 
                 // Extra reward for strong monsters
                 foreach (ClientCard monster in bot.GetMonsters())
                 {
-                    if (monster != null && monster.Attack >= 2500)
-                        reward += 2.0;
+                    if (monster != null)
+                    {
+                        if (monster.Attack >= 3000)
+                            reward += 4.0;
+                        else if (monster.Attack >= 2500)
+                            reward += 3.0;
+                        else if (monster.Attack >= 2000)
+                            reward += 2.0;
+                        else if (monster.Attack >= 1500)
+                            reward += 1.0;
+                    }
                 }
+                
+                // Extra penalty for opponent's strong monsters
+                foreach (ClientCard monster in enemy.GetMonsters())
+                {
+                    if (monster != null)
+                    {
+                        if (monster.Attack >= 3000)
+                            reward -= 4.0;
+                        else if (monster.Attack >= 2500)
+                            reward -= 3.0;
+                        else if (monster.Attack >= 2000)
+                            reward -= 2.0;
+                    }
+                }
+                
+                // Reward for being in a winning position
+                if (bot.LifePoints > enemy.LifePoints && botMonsterCount > enemyMonsterCount)
+                    reward += 3.0;
+                
+                // Penalty for being in a losing position
+                if (bot.LifePoints < enemy.LifePoints && botMonsterCount < enemyMonsterCount)
+                    reward -= 3.0;
 
                 // Update Q-values with calculated reward
                 UpdateQValues(reward);
@@ -290,25 +489,37 @@ namespace WindBot.Game.AI.Decks
                 Logger.DebugWriteLine($"Calculated reward: {reward}");
             }
 
-            public void StartTurn(ClientField bot, ClientField enemy)
+            public override void StartTurn(ClientField bot, ClientField enemy)
             {
                 PreviousEnemyLP = enemy.LifePoints;
                 PreviousBotLP = bot.LifePoints;
                 TurnStartBotCards = bot.Hand.Count + bot.GetMonsterCount() + bot.GetSpellCount();
                 TurnStartEnemyCards = enemy.Hand.Count + enemy.GetMonsterCount() + enemy.GetSpellCount();
                 CardActionsThisTurn.Clear();
+                
+                // Track opponent's cards for adaptive strategy
+                foreach (ClientCard card in enemy.GetMonsters())
+                {
+                    if (card != null && card.Id > 0)
+                        OpponentCardsSeen.Add(card.Id);
+                }
+                foreach (ClientCard card in enemy.GetSpells())
+                {
+                    if (card != null && card.Id > 0)
+                        OpponentCardsSeen.Add(card.Id);
+                }
             }
 
-            public void EndTurn(ClientField bot, ClientField enemy)
+            public override void EndTurn(ClientField bot, ClientField enemy)
             {
                 CalculateRewards(bot, enemy);
                 SaveQValues();
             }
 
-            public ActionType GetBestAction(int cardId, List<ActionType> availableActions)
+            public override ActionType GetBestAction(int cardId, List<ActionType> availableActions)
             {
                 // Exploration: randomly select an action
-                if (Random.NextDouble() < ExplorationRate)
+                if (Random.NextDouble() < GetCurrentExplorationRate())
                 {
                     int randomIndex = Random.Next(availableActions.Count);
                     return availableActions[randomIndex];
@@ -337,17 +548,39 @@ namespace WindBot.Game.AI.Decks
                 return availableActions[0];
             }
 
-            public double GetCardActionValue(int cardId, ActionType action)
+            public override double GetCardActionValue(int cardId, ActionType action)
             {
                 string actionKey = action.ToString();
                 if (QValues.ContainsKey(cardId) && QValues[cardId].ContainsKey(actionKey))
                     return QValues[cardId][actionKey];
                 return 0.0; // Default value for unknown card/action pairs
             }
+            
+            public override void ProcessDuelEnd(bool won)
+            {
+                // Apply a final strong reward/penalty
+                double finalReward = won ? 100.0 : -100.0;
+                UpdateQValues(finalReward);
+                
+                // Clear tracking data for next duel
+                OpponentCardsSeen.Clear();
+                SaveQValues();
+            }
+            
+            public override List<int> GetTopPerformingCards(int count = 5)
+            {
+                // Get the top performing cards based on success rate
+                return CardSuccessCount
+                    .Where(kvp => CardUsageCount.ContainsKey(kvp.Key) && CardUsageCount[kvp.Key] >= 5)
+                    .OrderByDescending(kvp => (double)kvp.Value / CardUsageCount[kvp.Key])
+                    .Take(count)
+                    .Select(kvp => kvp.Key)
+                    .ToList();
+            }
         }
 
         // Class members for RL system
-        private CardActionValueNetwork RL;
+        private ReinforcementLearningSystem RL;
         private readonly string RLFilePath;
 
         [Serializable]
@@ -467,7 +700,7 @@ namespace WindBot.Game.AI.Decks
             AppDomain.CurrentDomain.ProcessExit += (sender, e) => SaveComboData();
 
             // Initialize RL system
-            RL = new CardActionValueNetwork();
+            RL = new ReinforcementLearningSystem(RLFilePath);
             Logger.DebugWriteLine("Initialized Reinforcement Learning system");
             
             // Initialize domain knowledge
@@ -507,7 +740,7 @@ namespace WindBot.Game.AI.Decks
                 // Process the result with our RL system
                 if (RL != null)
                 {
-                    RL.ProcessDuelEnd(Bot, Enemy, won);
+                    RL.ProcessDuelEnd(won);
                 }
                 
                 // Update combo performance based on result
@@ -1406,6 +1639,35 @@ namespace WindBot.Game.AI.Decks
         private bool SummonHighestAttackMonster()
         {
             if (Card == null) return false;
+            
+            // Check if this is a tribute summon that requires existing monsters
+            if (Card.Level >= 5 && Bot.GetMonsterCount() > 0)
+            {
+                // Calculate the net ATK gain from this tribute summon
+                int tributeCount = Card.Level <= 6 ? 1 : 2;
+                int existingAttack = 0;
+                
+                // Get the monsters that would be tributed (typically the lowest ATK ones)
+                var potentialTributes = Bot.GetMonsters()
+                    .Where(m => m != null && m.IsFaceup())
+                    .OrderBy(m => m.Attack)
+                    .Take(tributeCount)
+                    .ToList();
+                    
+                // Calculate their combined ATK
+                foreach (var tribute in potentialTributes)
+                {
+                    existingAttack += tribute.Attack;
+                }
+                
+                // Only proceed if the new monster's ATK is significantly higher
+                // or provides some other benefit (e.g., effect monster)
+                if (Card.Attack <= existingAttack && !Card.HasType(CardType.Effect))
+                {
+                    Logger.DebugWriteLine($"Avoiding inefficient tribute of {existingAttack} ATK for {Card.Attack} ATK monster");
+                    return false;
+                }
+            }
             
             // Set current action type for domain knowledge integration
             CurrentActionType = ActionType.Summon;
@@ -2323,7 +2585,7 @@ namespace WindBot.Game.AI.Decks
                 if (classificationBonus != 0)
                 {
                     // Apply classification knowledge to RL
-                    RL.BoostCardActionValue(Card.Id, CurrentActionType, classificationBonus);
+                    RL.UpdateQValues(classificationBonus);
                     Logger.DebugWriteLine($"Applied domain knowledge boost of {classificationBonus} to {Card.Id}");
                 }
                 
@@ -2459,7 +2721,7 @@ namespace WindBot.Game.AI.Decks
                         if (IsCardRemovalEffect(ourCard))
                         {
                             // If card can negate/destroy/banish, boost its value
-                            RL.BoostCardActionValue(ourCard.Id, ActionType.Activate, 15.0);
+                            RL.UpdateQValues(15.0);
                             Logger.DebugWriteLine($"Boosting card {ourCard.Id} as it can remove threat {card.Id}");
                         }
                     }
@@ -2477,7 +2739,7 @@ namespace WindBot.Game.AI.Decks
                             (ourCard.HasType(CardType.Spell) && ourCard.HasType(CardType.QuickPlay)))
                         {
                             // Boost defensive cards when facing high ATK monsters
-                            RL.BoostCardActionValue(ourCard.Id, ActionType.Activate, 10.0);
+                            RL.UpdateQValues(10.0);
                         }
                     }
                 }
@@ -2505,7 +2767,7 @@ namespace WindBot.Game.AI.Decks
                              namedCard.Description.Contains("return")))
                         {
                             // Boost cards that can remove floodgates
-                            RL.BoostCardActionValue(ourCard.Id, ActionType.Activate, 20.0);
+                            RL.UpdateQValues(20.0);
                             Logger.DebugWriteLine($"Boosting card {ourCard.Id} as it can remove floodgate {card.Id}");
                         }
                     }
@@ -2518,48 +2780,22 @@ namespace WindBot.Game.AI.Decks
         {
             if (card == null) return false;
             
-            // Check common removal card IDs
-            int[] removalCardIds = new int[] 
+            // This method checks if a card has removal effects
+            // Simplified version - in practice would check more cards or card text
+            
+            int[] removalEffectCards = new int[]
             {
-                5318639,   // Mystical Space Typhoon
-                43898403,  // Twin Twisters
-                83326048,  // Dimensional Barrier
-                23924608,  // Heavy Storm Duster
-                82732705,  // Skill Drain
-                18144506,  // Harpie's Feather Storm
-                77538567,  // Dark Hole
-                53129443,  // Dark Hole
                 44095762,  // Mirror Force
-                84749824,  // Solemn Warning
-                41420027,  // Solemn Judgment
-                40605147,  // Solemn Strike
-                24224830   // Called by the Grave
+                62279055,  // Magic Cylinder
+                25880422,  // Offerings to the Doomed
+                14532163,  // Lightning Storm
+                53129443,  // Dark Hole
+                12580477,  // Raigeki
+                83764718,  // Monster Reborn
+                83764719   // Monster Reborn (alternate ID)
             };
             
-            if (removalCardIds.Contains(card.Id))
-            {
-                return true;
-            }
-            
-            // Check card description for common removal keywords
-            var namedCard = NamedCard.Get(card.Id);
-            if (namedCard != null && namedCard.Description != null)
-            {
-                string desc = namedCard.Description.ToLower();
-                
-                // Check for common removal keywords
-                if (desc.Contains("destroy") || 
-                    desc.Contains("banish") || 
-                    desc.Contains("remove from") || 
-                    desc.Contains("return to") || 
-                    desc.Contains("negate") || 
-                    desc.Contains("cannot activate"))
-                {
-                    return true;
-                }
-            }
-            
-            return false;
+            return removalEffectCards.Contains(card.Id);
         }
 
         // Update all decision-making methods to use domain knowledge
@@ -2573,31 +2809,50 @@ namespace WindBot.Game.AI.Decks
             // Enhance RL with domain knowledge
             EnhanceRLWithDomainKnowledge();
             
-            // Check if this is a complex decision
-            if (IsComplexDecision(Card, ActionType.Activate))
+            // Track that we used this monster effect
+            if (!CardsPlayedThisTurn.Contains(Card.Id))
             {
-                Logger.DebugWriteLine($"Using MCTS to evaluate monster effect activation for {Card.Id}");
-                // Get potential targets for the effect
-                List<ClientCard> potentialTargets = Enemy.GetMonsters()
-                    .Where(m => m != null && m.IsFaceup())
-                    .ToList();
-                return EvaluateComplexDecision(Card, ActionType.Activate, potentialTargets);
+                CardsPlayedThisTurn.Add(Card.Id);
             }
             
-            // If RL system exists, use it to decide
+            // Use RL to decide whether to activate
             if (RL != null)
             {
                 double actionValue = RL.GetCardActionValue(Card.Id, ActionType.Activate);
                 
-                if (actionValue > 5.0 || (Duel.Player == 1 && actionValue > 0.0))
+                if (actionValue > 5.0)
                 {
-                    Logger.DebugWriteLine($"RL decided to activate monster effect for {Card.Id} with value {actionValue}");
+                    Logger.DebugWriteLine($"RL decided to activate monster effect {Card.Id} with value {actionValue}");
                     RL.TrackAction(Card.Id, ActionType.Activate);
+                    return true;
+                }
+                else if (actionValue < -5.0)
+                {
+                    Logger.DebugWriteLine($"RL avoiding activation of monster effect {Card.Id}");
+                    return false;
+                }
+            }
+            
+            // Check for specific known effect monsters
+            if (IsCardRemovalEffect(Card))
+            {
+                // Target the highest ATK enemy monster
+                var targets = Enemy.GetMonsters().Where(m => m != null && m.HasType(CardType.Monster)).ToList();
+                if (targets.Count > 0)
+                {
+                    AI.SelectCard(targets.OrderByDescending(m => m.Attack).First());
                     return true;
                 }
             }
             
-            return Program.Rand.Next(10) >= 5;
+            // Use MCTS for complex decisions
+            if (IsComplexDecision(Card, ActionType.Activate))
+            {
+                return EvaluateComplexDecision(Card, ActionType.Activate);
+            }
+            
+            // Default behavior - 70% chance to activate monster effects
+            return Program.Rand.Next(10) >= 3;
         }
 
         // Reinforcement Learning System
@@ -3087,6 +3342,13 @@ namespace WindBot.Game.AI.Decks
                 
                 return bestAction;
             }
+
+            // Add this method to the CardActionValueNetwork class
+            public List<int> GetTopPerformingCards(int count = 10)
+            {
+                // Just delegate to existing method
+                return GetTopValuedCards(count);
+            }
         }
 
         // Override the base OnNewTurn to track turn changes and learn from results
@@ -3133,30 +3395,32 @@ namespace WindBot.Game.AI.Decks
         // Log information about high-value cards in hand
         private void LogHighValueCardsInHand()
         {
-            if (RL == null) return;
+            if (Bot?.Hand == null) return;
             
-            // Get the top-valued cards from our learning system
-            List<int> topCards = RL.GetTopValuedCards(5);
+            Logger.DebugWriteLine($"Hand analysis (turn {Duel.Turn}):");
             
-            // Check if any of these cards are in our hand
-            List<int> highValueCardsInHand = new List<int>();
             foreach (ClientCard card in Bot.Hand)
             {
-                if (card != null && topCards.Contains(card.Id))
-                {
-                    highValueCardsInHand.Add(card.Id);
-                    
-                    // Get the recommended action for this card
-                    ActionType bestAction = RL.GetBestActionType(card.Id);
-                    double actionValue = RL.GetCardActionValue(card.Id, bestAction);
-                    
-                    Logger.DebugWriteLine($"High-value card in hand: {card.Id}, recommended action: {bestAction}, value: {actionValue:F2}");
-                }
+                if (card == null) continue;
+                
+                int score = EvaluateCardWithContext(card);
+                double rlValue = RL != null ? RL.GetCardActionValue(card.Id, ActionType.Activate) : 0;
+                
+                Logger.DebugWriteLine($"Card {card.Id}: Score {score}, RL value {rlValue}");
             }
             
-            if (highValueCardsInHand.Count > 0)
+            // Get top performing cards from RL
+            if (RL != null)
             {
-                Logger.DebugWriteLine($"Found {highValueCardsInHand.Count} high-value cards in hand");
+                var topCards = RL.GetTopPerformingCards();
+                if (topCards.Count > 0)
+                {
+                    Logger.DebugWriteLine("Top performing cards:");
+                    foreach (int cardId in topCards)
+                    {
+                        Logger.DebugWriteLine($"Card {cardId}");
+                    }
+                }
             }
         }
 
@@ -3244,106 +3508,52 @@ namespace WindBot.Game.AI.Decks
         /// </summary>
         private bool LethalAttackCheck()
         {
-            // Only check during our battle phase
-            if (Duel.Phase != DuelPhase.Battle || Duel.Player != 0)
-                return false;
+            // Skip if not our battle phase or no monsters
+            if (Duel.Phase != DuelPhase.Battle || Duel.Player != 0) return false;
+            if (Bot.GetMonsterCount() == 0) return false;
             
-            // Check if we have enough attack power to win
-            int totalAttackPower = 0;
+            int totalDamage = 0;
             List<ClientCard> attackers = new List<ClientCard>();
             
-            foreach (ClientCard monster in Bot.GetMonsters())
+            // Calculate potential damage from all our monsters
+            foreach (ClientCard attacker in Bot.GetMonsters())
             {
-                if (monster != null && monster.IsAttack() && !monster.IsShouldNotBeTarget() && !monster.IsDisabled())
-                {
-                    totalAttackPower += monster.Attack;
-                    attackers.Add(monster);
-                }
+                if (attacker == null || !attacker.CanDirectAttack) continue;
+                totalDamage += attacker.Attack;
+                attackers.Add(attacker);
             }
             
-            // If we have enough attack power to win, prioritize direct attacks
-            if (totalAttackPower >= Enemy.LifePoints)
+            // Can we win by direct attacks?
+            if (totalDamage >= Enemy.LifePoints && Enemy.GetMonsterCount() == 0)
             {
-                Logger.DebugWriteLine($"Lethal damage detected: {totalAttackPower} attack vs {Enemy.LifePoints} LP");
+                Logger.DebugWriteLine($"Detected lethal: {totalDamage} damage vs {Enemy.LifePoints} LP");
                 
-                // Check if direct attacks are possible
-                int directAttackPower = 0;
-                if (Enemy.GetMonsterCount() == 0)
+                // Attack with all monsters for game
+                foreach (ClientCard attacker in attackers)
                 {
-                    // All attackers can attack directly
-                    directAttackPower = totalAttackPower;
-                }
-                else
-                {
-                    // Check if we have enough attack power to get through the opponent's monsters
-                    List<ClientCard> enemyMonsters = Enemy.GetMonsters().Where(m => m != null && m.IsAttack()).ToList();
-                    if (enemyMonsters.Count == 0)
-                    {
-                        // All monsters are in defense position, can attack directly if they can be bypassed
-                        foreach (ClientCard attacker in attackers)
-                        {
-                            if (attacker.CanDirectAttack)
-                            {
-                                directAttackPower += attacker.Attack;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Try to attack over the opponent's monsters first
-                        // Sort enemy monsters by ATK
-                        enemyMonsters.Sort((a, b) => a.Attack.CompareTo(b.Attack));
-                        
-                        // Sort our attackers by ATK (highest first)
-                        attackers.Sort((a, b) => b.Attack.CompareTo(a.Attack));
-                        
-                        // See if we can defeat all enemy monsters and have enough attack left for game
-                        int remainingAttack = totalAttackPower;
-                        bool canDefeatAllMonsters = true;
-                        
-                        for (int i = 0; i < enemyMonsters.Count; i++)
-                        {
-                            if (i < attackers.Count && attackers[i].Attack > enemyMonsters[i].Attack)
-                            {
-                                remainingAttack -= enemyMonsters[i].Attack;
-                            }
-                            else
-                            {
-                                canDefeatAllMonsters = false;
-                                break;
-                            }
-                        }
-                        
-                        if (canDefeatAllMonsters && remainingAttack >= Enemy.LifePoints)
-                        {
-                            Logger.DebugWriteLine("Can defeat all monsters and still have lethal damage");
-                            directAttackPower = remainingAttack;
-                        }
-                    }
+                    AI.SelectCard(attacker);
+                    AI.SelectOption(1); // Select attack directly
                 }
                 
-                // If we have enough direct attack power for game, force the attack
-                if (directAttackPower >= Enemy.LifePoints)
+                return true;
+            }
+            
+            // Can't win directly, try to clear opponent's field for next turn
+            if (Enemy.GetMonsterCount() > 0)
+            {
+                // Try to clear opponent's field
+                var enemyMonsters = Enemy.GetMonsters().Where(m => m != null).OrderByDescending(m => m.Attack).ToList();
+                var ourMonsters = Bot.GetMonsters().Where(m => m != null).OrderByDescending(m => m.Attack).ToList();
+                
+                // Match our highest ATK against their highest ATK if we can win
+                for (int i = 0; i < ourMonsters.Count && i < enemyMonsters.Count; i++)
                 {
-                    // Signal the bot to prioritize attacking
-                    Logger.DebugWriteLine($"Lethal direct damage available: {directAttackPower}. Going for game!");
-                    
-                    // If we have any attack boosting cards in hand, use them now
-                    foreach (ClientCard card in Bot.Hand)
+                    if (ourMonsters[i].Attack > enemyMonsters[i].Attack)
                     {
-                        if (card != null && card.IsSpell() && 
-                            (card.Name.Contains("Honest") || 
-                             card.Name.Contains("Limiter Removal") || 
-                             card.Name.Contains("Attack") || 
-                             card.Name.Contains("Power")))
-                        {
-                            AI.SelectCard(card);
-                            return true;
-                        }
+                        AI.SelectCard(ourMonsters[i]);
+                        AI.SelectNextCard(enemyMonsters[i]);
+                        Logger.DebugWriteLine($"Attacking {enemyMonsters[i].Attack} with {ourMonsters[i].Attack}");
                     }
-                    
-                    // Proceed with attacking
-                    return true;
                 }
             }
             

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+kpikTYSpes=",
+  "dgSpecHash": "5nienMHKEtc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj",
+  "projectFilePath": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\libWindbot.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\zeak6\\.nuget\\packages\\embeddinator-4000\\0.4.0\\embeddinator-4000.0.4.0.nupkg.sha512",
     "C:\\Users\\zeak6\\.nuget\\packages\\xamarin.android.support.animated.vector.drawable\\25.4.0.2\\xamarin.android.support.animated.vector.drawable.25.4.0.2.nupkg.sha512",

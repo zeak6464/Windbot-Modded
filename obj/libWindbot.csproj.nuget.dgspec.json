@@ -1,14 +1,14 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj": {}
+    "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\libWindbot.csproj": {}
   },
   "projects": {
-    "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj": {
+    "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\ExecutorBase\\ExecutorBase.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj",
+        "projectUniqueName": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\ExecutorBase\\ExecutorBase.csproj",
         "projectName": "ExecutorBase",
-        "projectPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj",
+        "projectPath": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\ExecutorBase\\ExecutorBase.csproj",
         "UsingMicrosoftNETSdk": false,
         "frameworks": {
           "net48": {
@@ -20,14 +20,14 @@
         "net48": {}
       }
     },
-    "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj": {
+    "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\libWindbot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj",
+        "projectUniqueName": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\libWindbot.csproj",
         "projectName": "libWindbot",
-        "projectPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\libWindbot.csproj",
+        "projectPath": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\libWindbot.csproj",
         "packagesPath": "C:\\Users\\zeak6\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\obj\\",
+        "outputPath": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\obj\\",
         "projectStyle": "PackageReference",
         "skipContentFileWrite": true,
         "UsingMicrosoftNETSdk": false,
@@ -49,8 +49,8 @@
         "frameworks": {
           "monoandroid71": {
             "projectReferences": {
-              "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj": {
-                "projectPath": "C:\\Users\\zeak6\\Downloads\\windbot-master\\windbot-master\\ExecutorBase\\ExecutorBase.csproj"
+              "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\ExecutorBase\\ExecutorBase.csproj": {
+                "projectPath": "C:\\Users\\zeak6\\Documents\\GitHub\\Windbot-Modded\\ExecutorBase\\ExecutorBase.csproj"
               }
             }
           }

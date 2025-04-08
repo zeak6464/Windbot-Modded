@@ -6,3 +6,11 @@ C:\Users\zeak6\Downloads\windbot-master\windbot-master\ExecutorBase\obj\Debug\Ex
 C:\Users\zeak6\Downloads\windbot-master\windbot-master\ExecutorBase\obj\Debug\Executor.CD5B1A36.Up2Date
 C:\Users\zeak6\Downloads\windbot-master\windbot-master\ExecutorBase\obj\Debug\ExecutorBase.dll
 C:\Users\zeak6\Downloads\windbot-master\windbot-master\ExecutorBase\obj\Debug\ExecutorBase.pdb
+C:\Users\zeak6\Documents\GitHub\Windbot-Modded\ExecutorBase\bin\Debug\ExecutorBase.dll
+C:\Users\zeak6\Documents\GitHub\Windbot-Modded\ExecutorBase\bin\Debug\ExecutorBase.pdb
+C:\Users\zeak6\Documents\GitHub\Windbot-Modded\ExecutorBase\bin\Debug\Mono.Data.Sqlite.dll
+C:\Users\zeak6\Documents\GitHub\Windbot-Modded\ExecutorBase\obj\Debug\ExecutorBase.csproj.AssemblyReference.cache
+C:\Users\zeak6\Documents\GitHub\Windbot-Modded\ExecutorBase\obj\Debug\ExecutorBase.csproj.CoreCompileInputs.cache
+C:\Users\zeak6\Documents\GitHub\Windbot-Modded\ExecutorBase\obj\Debug\Executor.CD5B1A36.Up2Date
+C:\Users\zeak6\Documents\GitHub\Windbot-Modded\ExecutorBase\obj\Debug\ExecutorBase.dll
+C:\Users\zeak6\Documents\GitHub\Windbot-Modded\ExecutorBase\obj\Debug\ExecutorBase.pdb

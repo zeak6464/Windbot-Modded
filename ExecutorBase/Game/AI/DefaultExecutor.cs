@@ -534,47 +534,40 @@ namespace WindBot.Game.AI
         /// </summary>
         protected bool DefaultInfiniteImpermanence()
         {
-            // TODO: disable s & t
+            // Don't negate certain cards or chain to our own cards
             ClientCard LastChainCard = Util.GetLastChainCard();
-            if (LastChainCard != null && (LastChainCard.IsCode(_CardId.GalaxySoldier) && Enemy.Hand.Count >= 3
-                                    || LastChainCard.IsCode(_CardId.EffectVeiler, _CardId.InfiniteImpermanence)))
+            if (LastChainCard != null && 
+                (LastChainCard.IsCode(_CardId.GalaxySoldier) && Enemy.Hand.Count >= 3 ||
+                 LastChainCard.IsCode(_CardId.EffectVeiler, _CardId.InfiniteImpermanence) ||
+                 LastChainCard.Controller == 0)) // Don't negate our own cards
                 return false;
-            return DefaultDisableMonster();
-        }
-        /// <summary>
-        /// Chain the enemy monster, or disable monster like Rescue Rabbit.
-        /// </summary>
-        protected bool DefaultBreakthroughSkill()
-        {
-            if (!DefaultUniqueTrap())
-                return false;
-            return DefaultDisableMonster();
-        }
-        /// <summary>
-        /// Chain the enemy monster, or disable monster like Rescue Rabbit.
-        /// </summary>
-        protected bool DefaultDisableMonster()
-        {
+            
+            // Use modified DefaultDisableMonster implementation that checks controllers
             if (Duel.Player == 1)
             {
                 ClientCard target = Enemy.MonsterZone.GetShouldBeDisabledBeforeItUseEffectMonster();
-                if (target != null)
+                if (target != null && target.Controller == 1)
                 {
                     AI.SelectCard(target);
                     return true;
                 }
             }
 
-            ClientCard LastChainCard = Util.GetLastChainCard();
-
-            if (LastChainCard != null && LastChainCard.Controller == 1 && LastChainCard.Location == CardLocation.MonsterZone &&
-                !LastChainCard.IsDisabled() && !LastChainCard.IsShouldNotBeTarget() && !LastChainCard.IsShouldNotBeSpellTrapTarget())
+            // Rest of the logic from DefaultDisableMonster with controller checks
+            LastChainCard = Util.GetLastChainCard();
+            if (LastChainCard != null && 
+                LastChainCard.Controller == 1 && 
+                LastChainCard.Location == CardLocation.MonsterZone &&
+                !LastChainCard.IsDisabled() && 
+                !LastChainCard.IsShouldNotBeTarget() && 
+                !LastChainCard.IsShouldNotBeSpellTrapTarget())
             {
                 AI.SelectCard(LastChainCard);
                 return true;
             }
 
-            if (Bot.BattlingMonster != null && Enemy.BattlingMonster != null)
+            // Only target enemy battling monsters
+            if (Bot.BattlingMonster != null && Enemy.BattlingMonster != null && Enemy.BattlingMonster.Controller == 1)
             {
                 if (!Enemy.BattlingMonster.IsDisabled() && Enemy.BattlingMonster.IsCode(_CardId.EaterOfMillions))
                 {
@@ -590,6 +583,69 @@ namespace WindBot.Game.AI
                 return true;
             }
 
+            return false;
+        }
+        /// <summary>
+        /// Chain the enemy monster, or disable monster like Rescue Rabbit.
+        /// </summary>
+        protected bool DefaultBreakthroughSkill()
+        {
+            if (!DefaultUniqueTrap())
+                return false;
+            return DefaultDisableMonster();
+        }
+        /// <summary>
+        /// Chain the enemy monster, or disable monster like Rescue Rabbit.
+        /// </summary>
+        protected bool DefaultDisableMonster()
+        {
+            // First check for high-priority monsters that should be negated immediately
+            if (Duel.Player == 1)
+            {
+                ClientCard target = Enemy.MonsterZone.GetShouldBeDisabledBeforeItUseEffectMonster();
+                if (target != null && target.Controller == 1) // Make sure it's an enemy card
+                {
+                    AI.SelectCard(target);
+                    return true;
+                }
+            }
+
+            ClientCard LastChainCard = Util.GetLastChainCard();
+
+            // Check if the last chain card is an enemy card in the monster zone that can be negated
+            if (LastChainCard != null && 
+                LastChainCard.Controller == 1 && // Double-check it's an enemy card
+                LastChainCard.Location == CardLocation.MonsterZone &&
+                !LastChainCard.IsDisabled() && 
+                !LastChainCard.IsShouldNotBeTarget() && 
+                !LastChainCard.IsShouldNotBeSpellTrapTarget())
+            {
+                AI.SelectCard(LastChainCard);
+                return true;
+            }
+
+            // Check for special battle cases
+            if (Bot.BattlingMonster != null && Enemy.BattlingMonster != null)
+            {
+                if (!Enemy.BattlingMonster.IsDisabled() && 
+                    Enemy.BattlingMonster.IsCode(_CardId.EaterOfMillions) && 
+                    Enemy.BattlingMonster.Controller == 1) // Make sure it's an enemy card
+                {
+                    AI.SelectCard(Enemy.BattlingMonster);
+                    return true;
+                }
+            }
+
+            // Check for Utopia The Lightning at battle start
+            if (Duel.Phase == DuelPhase.BattleStart && 
+                Duel.Player == 1 &&
+                Enemy.HasInMonstersZone(_CardId.NumberS39UtopiaTheLightning, true))
+            {
+                AI.SelectCard(_CardId.NumberS39UtopiaTheLightning);
+                return true;
+            }
+
+            // If no valid enemy target is found, don't activate the card
             return false;
         }
 
