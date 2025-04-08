@@ -282,6 +282,7 @@ namespace WindBot.Game.AI.Decks
 
             public override void TrackAction(int cardId, ActionType action)
             {
+                // Store action for current turn tracking
                 if (!CardActionsThisTurn.ContainsKey(cardId))
                 {
                     CardActionsThisTurn[cardId] = action;
@@ -291,6 +292,51 @@ namespace WindBot.Game.AI.Decks
                     if (!CardUsageCount.ContainsKey(cardId))
                         CardUsageCount[cardId] = 0;
                     CardUsageCount[cardId]++;
+                    
+                    // Initialize QValues for this card and action if not exists
+                    string actionKey = action.ToString();
+                    if (!QValues.ContainsKey(cardId))
+                    {
+                        QValues[cardId] = new Dictionary<string, double>();
+                    }
+                    
+                    if (!QValues[cardId].ContainsKey(actionKey))
+                    {
+                        // Initialize with a slightly optimistic value to encourage exploration
+                        QValues[cardId][actionKey] = 2.0;
+                        Logger.DebugWriteLine($"Initialized Q-value for card {cardId}, action {action}");
+                    }
+                    
+                    // For Set actions, also track SetMonster and SetSpellTrap variants for completeness
+                    if (action == ActionType.Set)
+                    {
+                        string monsterActionKey = ActionType.SetMonster.ToString();
+                        string spellTrapActionKey = ActionType.SetSpellTrap.ToString();
+                        
+                        // Initialize both specific action types with optimistic values
+                        if (!QValues[cardId].ContainsKey(monsterActionKey))
+                        {
+                            QValues[cardId][monsterActionKey] = 2.0;
+                        }
+                        
+                        if (!QValues[cardId].ContainsKey(spellTrapActionKey))
+                        {
+                            QValues[cardId][spellTrapActionKey] = 2.0;
+                        }
+                        
+                        Logger.DebugWriteLine($"Initialized specific Set Q-values for card {cardId}");
+                    }
+                    
+                    // For SetMonster/SetSpellTrap actions, also track the generic Set action
+                    if (action == ActionType.SetMonster || action == ActionType.SetSpellTrap)
+                    {
+                        string genericActionKey = ActionType.Set.ToString();
+                        if (!QValues[cardId].ContainsKey(genericActionKey))
+                        {
+                            QValues[cardId][genericActionKey] = 2.0;
+                            Logger.DebugWriteLine($"Initialized generic Set Q-value for card {cardId}");
+                        }
+                    }
                     
                     Logger.DebugWriteLine($"Tracked action: Card {cardId}, Action {action}, Total actions: {TotalActions}");
                 }
@@ -569,6 +615,14 @@ namespace WindBot.Game.AI.Decks
                 string actionKey = action.ToString();
                 if (QValues.ContainsKey(cardId) && QValues[cardId].ContainsKey(actionKey))
                     return QValues[cardId][actionKey];
+                
+                // Special case for Set/SetMonster/SetSpellTrap - initialize with a value that encourages setting
+                if (action == ActionType.Set || action == ActionType.SetMonster || action == ActionType.SetSpellTrap)
+                {
+                    // Use optimistic initialization to encourage setting cards
+                    Logger.DebugWriteLine($"Returning optimistic default value for {cardId}, action {action}");
+                    return 2.0 + (Program.Rand.NextDouble() * 2.0); // 2.0-4.0 range for setting actions
+                }
                 
                 // Use optimistic initialization to encourage exploration of new cards
                 return 2.0; // Default value for unknown card/action pairs
