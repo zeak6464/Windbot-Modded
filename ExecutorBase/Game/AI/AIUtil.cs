@@ -442,5 +442,46 @@ namespace WindBot.Game.AI
 
             return selected;
         }
+        
+        /// <summary>
+        /// Select the best card from a list of cards based on attack, defense, and effects
+        /// </summary>
+        /// <param name="cards">List of cards to select from</param>
+        /// <returns>The best card from the list</returns>
+        public ClientCard SelectBestCard(IList<ClientCard> cards)
+        {
+            if (cards == null || cards.Count == 0)
+                return null;
+                
+            // First check for problem-solving cards like floodgates
+            foreach (ClientCard card in cards)
+            {
+                if (card.HasType(CardType.Monster) && card.HasSetcode(0x10f3)) // Counter Fairy
+                    return card;
+                if (card.HasType(CardType.Spell) && card.HasSetcode(0xf3)) // Counter Spell
+                    return card;
+            }
+            
+            // Then check for monsters by attack power
+            ClientCard bestMonster = null;
+            int bestAttack = 0;
+            foreach (ClientCard card in cards)
+            {
+                if (card.HasType(CardType.Monster))
+                {
+                    if (card.Attack > bestAttack)
+                    {
+                        bestAttack = card.Attack;
+                        bestMonster = card;
+                    }
+                }
+            }
+            
+            if (bestMonster != null)
+                return bestMonster;
+                
+            // Default to first card if no special criteria
+            return cards[0];
+        }
     }
 }

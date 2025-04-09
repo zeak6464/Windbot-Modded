@@ -6,6 +6,7 @@ using System.Web;
 using WindBot.Game;
 using WindBot.Game.AI;
 using YGOSharp.OCGWrapper;
+using YGOSharp.OCGWrapper.Enums;
 using System.Runtime.Serialization.Json;
 
 namespace WindBot
@@ -18,6 +19,28 @@ namespace WindBot
 
         internal static void Main(string[] args)
         {
+            // Test the DLL functions
+            try
+            {
+                var duel = new Duel();
+                var card = new ClientCard(123, CardLocation.Hand, 0, 0);
+                var util = new AIUtil(duel);
+                var gameClient = new GameClient(new WindBotInfo());
+                var gameAI = new GameAI(duel, "default", (msg, b) => {}, (msg, type) => {}, "");
+                
+                Console.WriteLine("Testing DLL functions...");
+                Console.WriteLine($"Card ATK: {DLL.DLL_CardGetAtk(card)}");
+                Console.WriteLine($"Card DEF: {DLL.DLL_CardGetDef(card)}");
+                Console.WriteLine($"Card Type: {DLL.DLL_CardGetType(card)}");
+                Console.WriteLine($"Card Is Monster: {DLL.DLL_CardIsThisMonster(card)}");
+                Console.WriteLine($"Player LP: {DLL.DLL_DuelGetLP(duel, 0)}");
+                Console.WriteLine("DLL functions test completed successfully!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DLL function test failed: {ex.Message}");
+            }
+            
             Logger.WriteLine("WindBot starting...");
 
             Config.Load(args);

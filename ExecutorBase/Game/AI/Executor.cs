@@ -199,7 +199,7 @@ namespace WindBot.Game.AI
         public virtual bool OnSelectBattleReplay()
         {
             // Overrided in DefaultExecutor
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -278,6 +278,16 @@ namespace WindBot.Game.AI
         private bool DefaultNoExecutor()
         {
             return Executors.All(exec => exec.Type != Type || exec.CardId != Card.Id);
+        }
+
+        public void SetEnd()
+        {
+            // Called by DLL_DuelComDoEnd
+            // Signal to end the current phase/turn
+            if (Main != null)
+                Main.End = true;
+            else if (Battle != null)
+                Battle.End = true;
         }
     }
 }

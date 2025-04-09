@@ -69,6 +69,7 @@ MONO_EMBEDDINATOR_API int32_t WindBot_Game_AI_Executor_OnSelectPlace(WindBot_Gam
 MONO_EMBEDDINATOR_API bool WindBot_Game_AI_Executor_OnSelectBattleReplay(WindBot_Game_AI_Executor* object);
 MONO_EMBEDDINATOR_API void WindBot_Game_AI_Executor_AddExecutor(WindBot_Game_AI_Executor* object, WindBot_Game_AI_ExecutorType type, int32_t cardId, int32_t v);
 MONO_EMBEDDINATOR_API void WindBot_Game_AI_Executor_AddExecutor_1(WindBot_Game_AI_Executor* object, WindBot_Game_AI_ExecutorType type);
+MONO_EMBEDDINATOR_API void WindBot_Game_AI_Executor_SetEnd(WindBot_Game_AI_Executor* object);
 MONO_EMBEDDINATOR_API const char* WindBot_Game_AI_Executor_get_Deck(WindBot_Game_AI_Executor* object);
 MONO_EMBEDDINATOR_API void WindBot_Game_AI_Executor_set_Deck(WindBot_Game_AI_Executor* object, const char* value);
 MONO_EMBEDDINATOR_API WindBot_Game_AI_ExecutorType WindBot_Game_AI_Executor_get_Type(WindBot_Game_AI_Executor* object);

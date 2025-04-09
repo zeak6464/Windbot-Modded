@@ -9,6 +9,9 @@ using WindBot.Game;
 using WindBot.Game.AI;
 using YGOSharp.OCGWrapper;
 using WindBot.Game.AI.Enums;
+using System.Text;
+using System.Runtime.Serialization.Json;
+using System.Runtime.Serialization;
 
 namespace WindBot.Game.AI.Decks
 {
@@ -91,9 +94,13 @@ namespace WindBot.Game.AI.Decks
 
         // Reinforcement Learning System
         [Serializable]
+        [DataContract]
         private class CardActionValueData
         {
+            [DataMember(Name = "QValues")]
             public Dictionary<int, Dictionary<string, double>> QValues { get; set; } = new Dictionary<int, Dictionary<string, double>>();
+            
+            [DataMember(Name = "LastUpdated")]
             public string LastUpdated { get; set; } = DateTime.Now.ToString();
         }
 
@@ -195,7 +202,14 @@ namespace WindBot.Game.AI.Decks
             private int TotalActions = 0;
             private string QLearningFilePath;
             
-            // Q-Values storage
+            // Add fields for rewards configuration
+            private string RewardsConfigPath;
+            private Dictionary<string, double> RewardFactors = new Dictionary<string, double>();
+            private Dictionary<string, double> ExplorationSettings = new Dictionary<string, double>();
+            private Dictionary<string, double> LearningParameters = new Dictionary<string, double>();
+            private Dictionary<string, double> CardTypeRewards = new Dictionary<string, double>();
+            private Dictionary<string, double> ActionTypeMultipliers = new Dictionary<string, double>();
+
             private Dictionary<int, Dictionary<string, double>> QValues;
             
             // Tracking variables
@@ -216,67 +230,242 @@ namespace WindBot.Game.AI.Decks
             public ReinforcementLearningSystem(string filePath)
             {
                 QLearningFilePath = filePath;
-                QValues = new Dictionary<int, Dictionary<string, double>>(); // Initialize QValues
+                // Initialize rewards config path
+                RewardsConfigPath = Path.Combine(Path.GetDirectoryName(filePath), "universal_rewards_config.json");
+                
+                // Initialize with default values
+                InitializeDefaultRewardValues();
+                
+                // Load values from files
                 LoadQValues();
+                LoadRewardsConfig();
+                
+                Logger.DebugWriteLine($"Initialized Reinforcement Learning system");
             }
-
-            public override void LoadQValues()
+            
+            // Add method to initialize default reward values
+            private void InitializeDefaultRewardValues()
+            {
+                // Default reward factors
+                RewardFactors["LifePointDifferential"] = 0.5;
+                RewardFactors["CardAdvantage"] = 1.5;
+                RewardFactors["MonsterCountAdvantage"] = 2.0;
+                RewardFactors["HighAttackMonsterBonus"] = 0.8;
+                RewardFactors["GameWinReward"] = 100.0;
+                RewardFactors["GameLossReward"] = -100.0;
+                
+                // Default exploration settings
+                ExplorationSettings["BaseExplorationRate"] = 0.4;
+                ExplorationSettings["MinExplorationRate"] = 0.05;
+                
+                // Default learning parameters
+                LearningParameters["BaseLearningRate"] = 0.3;
+                LearningParameters["MinLearningRate"] = 0.05;
+                LearningParameters["DiscountFactor"] = 0.9;
+                
+                // Default card type rewards
+                CardTypeRewards["Monster"] = 1.0;
+                CardTypeRewards["Spell"] = 0.8;
+                CardTypeRewards["Trap"] = 0.7;
+                
+                // Default action type multipliers
+                ActionTypeMultipliers["Summon"] = 1.0;
+                ActionTypeMultipliers["SpecialSummon"] = 1.2;
+                ActionTypeMultipliers["Set"] = 0.7;
+                ActionTypeMultipliers["Activate"] = 1.0;
+            }
+            
+            // Add method to load rewards configuration from file
+            private void LoadRewardsConfig()
+            {
+                if (File.Exists(RewardsConfigPath))
+                {
+                    try
+                    {
+                        string json = File.ReadAllText(RewardsConfigPath);
+                        using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json)))
+                        {
+                            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Dictionary<string, Dictionary<string, double>>));
+                            var config = (Dictionary<string, Dictionary<string, double>>)serializer.ReadObject(ms);
+                            
+                            // Update our configurations
+                            if (config.ContainsKey("RewardFactors"))
+                                RewardFactors = config["RewardFactors"];
+                            
+                            if (config.ContainsKey("ExplorationSettings"))
+                                ExplorationSettings = config["ExplorationSettings"];
+                            
+                            if (config.ContainsKey("LearningParameters"))
+                                LearningParameters = config["LearningParameters"];
+                            
+                            if (config.ContainsKey("CardTypeRewards"))
+                                CardTypeRewards = config["CardTypeRewards"];
+                                
+                            if (config.ContainsKey("ActionTypeMultipliers"))
+                                ActionTypeMultipliers = config["ActionTypeMultipliers"];
+                                
+                            // Update internal parameters
+                            if (LearningParameters.ContainsKey("BaseLearningRate"))
+                                BaseLearningRate = LearningParameters["BaseLearningRate"];
+                                
+                            if (LearningParameters.ContainsKey("MinLearningRate"))
+                                MinLearningRate = LearningParameters["MinLearningRate"];
+                                
+                            if (LearningParameters.ContainsKey("DiscountFactor"))
+                                DiscountFactor = LearningParameters["DiscountFactor"];
+                        }
+                        
+                        Logger.DebugWriteLine("Loaded reward configuration from file");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteErrorLine($"Error loading rewards config: {ex.Message}");
+                        // Will use default values already initialized
+                    }
+                }
+                else
+                {
+                    // Save the default values if file doesn't exist
+                    SaveRewardsConfig();
+                }
+            }
+            
+            // Add method to save rewards configuration
+            private void SaveRewardsConfig()
             {
                 try
                 {
-                    if (File.Exists(QLearningFilePath))
+                    var config = new Dictionary<string, Dictionary<string, double>>();
+                    config["RewardFactors"] = RewardFactors;
+                    config["ExplorationSettings"] = ExplorationSettings;
+                    config["LearningParameters"] = LearningParameters;
+                    config["CardTypeRewards"] = CardTypeRewards;
+                    config["ActionTypeMultipliers"] = ActionTypeMultipliers;
+                    
+                    using (MemoryStream ms = new MemoryStream())
                     {
-                        string json = File.ReadAllText(QLearningFilePath);
-                        if (!string.IsNullOrWhiteSpace(json))
-                        {
-                            CardActionValueData data = JsonConvert.DeserializeObject<CardActionValueData>(json);
-                            if (data != null && data.QValues != null)
-                            {
-                                QValues = data.QValues;
-                                Logger.DebugWriteLine($"Loaded Q-values for {QValues.Count} cards from file");
-                            }
-                        }
+                        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Dictionary<string, Dictionary<string, double>>));
+                        serializer.WriteObject(ms, config);
+                        string json = Encoding.UTF8.GetString(ms.ToArray());
+                        File.WriteAllText(RewardsConfigPath, json);
                     }
                     
-                    // Add this check after loading
-                    if (QValues == null)
-                    {
-                        QValues = new Dictionary<int, Dictionary<string, double>>();
-                        Logger.DebugWriteLine("Initialized empty QValues dictionary");
-                    }
+                    Logger.DebugWriteLine("Saved reward configuration to file");
                 }
                 catch (Exception ex)
                 {
-                    Logger.DebugWriteLine($"Error loading Q-values: {ex.Message}");
-                    // Initialize with empty dictionary if loading fails
+                    Logger.WriteErrorLine($"Error saving rewards config: {ex.Message}");
+                }
+            }
+            
+            // Helper method to get reward factor with fallback
+            private double GetRewardFactor(string key, double defaultValue = 1.0)
+            {
+                if (RewardFactors == null)
+                {
+                    Logger.DebugWriteLine($"RewardFactors dictionary is null, returning default value {defaultValue} for {key}");
+                    return defaultValue;
+                }
+                return RewardFactors.ContainsKey(key) ? RewardFactors[key] : defaultValue;
+            }
+            
+            // Helper method to get card type reward multiplier
+            private double GetCardTypeReward(ClientCard card)
+            {
+                double reward = 1.0;
+                
+                if (card.IsMonster() && CardTypeRewards.ContainsKey("Monster"))
+                    reward *= CardTypeRewards["Monster"];
+                    
+                if (card.IsSpell() && CardTypeRewards.ContainsKey("Spell"))
+                    reward *= CardTypeRewards["Spell"];
+                    
+                if (card.IsTrap() && CardTypeRewards.ContainsKey("Trap"))
+                    reward *= CardTypeRewards["Trap"];
+                    
+                if (card.IsExtraCard() && CardTypeRewards.ContainsKey("ExtraDeck"))
+                    reward *= CardTypeRewards["ExtraDeck"];
+                    
+                return reward;
+            }
+            
+            // Helper method to get action type multiplier
+            private double GetActionTypeMultiplier(ActionType actionType)
+            {
+                if (ActionTypeMultipliers == null)
+                {
+                    Logger.DebugWriteLine("ActionTypeMultipliers dictionary is null, returning default multiplier 1.0");
+                    return 1.0;
+                }
+                
+                string key = actionType.ToString();
+                
+                // Check if key exists
+                if (!ActionTypeMultipliers.ContainsKey(key))
+                {
+                    // Add missing key with default value for future use
+                    ActionTypeMultipliers[key] = 1.0;
+                    Logger.DebugWriteLine($"Added missing action multiplier for {key}, using default 1.0");
+                    return 1.0;
+                }
+                
+                return ActionTypeMultipliers[key];
+            }
+            
+            public override void LoadQValues()
+            {
+                if (File.Exists(QLearningFilePath))
+                {
+                    try
+                    {
+                        string json = File.ReadAllText(QLearningFilePath);
+                        using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json)))
+                        {
+                            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(CardActionValueData));
+                            CardActionValueData data = (CardActionValueData)serializer.ReadObject(ms);
+                            QValues = data.QValues;
+                            Logger.DebugWriteLine($"Loaded Q-values for {QValues.Count} cards from file");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.WriteErrorLine($"Error loading Q-values: {ex.Message}");
+                        QValues = new Dictionary<int, Dictionary<string, double>>();
+                    }
+                }
+                else
+                {
                     QValues = new Dictionary<int, Dictionary<string, double>>();
+                    Logger.DebugWriteLine("No Q-values file found, starting with new data");
                 }
             }
 
             public override void SaveQValues()
             {
+                if (QValues == null || !ValuesChanged)
+                    return;
+                
                 try
                 {
-                    if (QValues == null)
-                    {
-                        QValues = new Dictionary<int, Dictionary<string, double>>();
-                        Logger.DebugWriteLine("Initialized empty QValues dictionary before saving");
-                    }
-                    
                     CardActionValueData data = new CardActionValueData
                     {
                         QValues = QValues,
                         LastUpdated = DateTime.Now.ToString()
                     };
-
-                    string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-                    File.WriteAllText(QLearningFilePath, json);
-                    Logger.DebugWriteLine($"Saved Q-values for {QValues.Count} cards to file");
-                    ValuesChanged = false;
+                    
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(CardActionValueData));
+                        serializer.WriteObject(ms, data);
+                        string json = Encoding.UTF8.GetString(ms.ToArray());
+                        File.WriteAllText(QLearningFilePath, json);
+                        Logger.DebugWriteLine($"Saved Q-values for {QValues.Count} cards to file");
+                        ValuesChanged = false;
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Logger.DebugWriteLine($"Error saving Q-values: {ex.Message}");
+                    Logger.WriteErrorLine($"Error saving Q-values: {ex.Message}");
                 }
             }
 
@@ -344,211 +533,199 @@ namespace WindBot.Game.AI.Decks
 
             public void UpdateQValues(double reward)
             {
-                if (QValues == null)
-                {
-                    QValues = new Dictionary<int, Dictionary<string, double>>();
-                    Logger.DebugWriteLine("Initialized QValues dictionary during UpdateQValues");
-                }
+                if (CardActionsThisTurn.Count == 0)
+                    return;
                 
-                foreach (var entry in CardActionsThisTurn)
-                {
-                    int cardId = entry.Key;
-                    ActionType action = entry.Value;
-                    string actionKey = action.ToString();
-
-                    // Initialize Q-values for this card if needed
-                    if (!QValues.ContainsKey(cardId))
-                        QValues[cardId] = new Dictionary<string, double>();
-
-                    // Initialize Q-value for this action if needed
-                    if (!QValues[cardId].ContainsKey(actionKey))
-                        QValues[cardId][actionKey] = 2.0; // Use optimistic initialization to encourage exploration
-
-                    // Track card reward
-                    if (!CardAverageReward.ContainsKey(cardId))
-                        CardAverageReward[cardId] = 0.0;
+                // Get learning rate based on configuration
+                double learningRate = LearningParameters.ContainsKey("BaseLearningRate") 
+                    ? LearningParameters["BaseLearningRate"] 
+                    : BaseLearningRate;
                     
-                    // Update average reward using weighted average
-                    int usageCount = CardUsageCount.ContainsKey(cardId) ? CardUsageCount[cardId] : 1;
-                    CardAverageReward[cardId] = ((CardAverageReward[cardId] * (usageCount - 1)) + reward) / usageCount;
-
-                    // Track success if reward is positive
+                // Get discount factor from configuration
+                double discount = LearningParameters.ContainsKey("DiscountFactor")
+                    ? LearningParameters["DiscountFactor"]
+                    : DiscountFactor;
+                
+                // Adjust learning rate based on experience
+                learningRate = Math.Max(
+                    LearningParameters.ContainsKey("MinLearningRate") 
+                        ? LearningParameters["MinLearningRate"] 
+                        : MinLearningRate,
+                    learningRate * Math.Exp(-0.001 * TotalActions)
+                );
+                
+                // For terminal states, assume max future value is 0
+                double maxFutureValue = 0.0;
+                
+                // Update Q-values for all actions taken this turn
+                foreach (var action in CardActionsThisTurn)
+                {
+                    int cardId = action.Key;
+                    string actionKey = action.Value.ToString();
+                    
+                    if (!QValues.ContainsKey(cardId))
+                    {
+                        QValues[cardId] = new Dictionary<string, double>();
+                    }
+                    
+                    if (!QValues[cardId].ContainsKey(actionKey))
+                    {
+                        QValues[cardId][actionKey] = 0.0;
+                    }
+                    
+                    double currentValue = QValues[cardId][actionKey];
+                    double newValue = currentValue + learningRate * (reward + discount * maxFutureValue - currentValue);
+                    QValues[cardId][actionKey] = newValue;
+                    
+                    // Track card success/usage for analytics
+                    if (!CardUsageCount.ContainsKey(cardId))
+                    {
+                        CardUsageCount[cardId] = 0;
+                        CardSuccessCount[cardId] = 0;
+                        CardAverageReward[cardId] = 0.0;
+                    }
+                    
+                    CardUsageCount[cardId]++;
+                    
                     if (reward > 0)
                     {
                         if (!CardSuccessCount.ContainsKey(cardId))
+                        {
                             CardSuccessCount[cardId] = 0;
+                        }
                         CardSuccessCount[cardId]++;
                     }
-
-                    // Adaptive learning rate - decreases as we gain more experience with the card
-                    double learningRate = GetCurrentLearningRate(cardId);
                     
-                    // Q-Learning update formula: Q(s,a) = Q(s,a) + α * (r + γ * max(Q(s',a')) - Q(s,a))
-                    double oldValue = QValues[cardId][actionKey];
-                    double maxNextValue = 0.0; // For terminal state
-
-                    double newValue = oldValue + learningRate * (reward + DiscountFactor * maxNextValue - oldValue);
-                    QValues[cardId][actionKey] = newValue;
-
-                    Logger.DebugWriteLine($"Updated Q-value for card {cardId}, action {actionKey}: {oldValue} -> {newValue} (lr: {learningRate})");
-                    ValuesChanged = true;
+                    // Update average reward
+                    if (!CardAverageReward.ContainsKey(cardId))
+                    {
+                        CardAverageReward[cardId] = reward;
+                    }
+                    else
+                    {
+                        double oldAvg = CardAverageReward[cardId];
+                        double newAvg = oldAvg + (reward - oldAvg) / CardUsageCount[cardId];
+                        CardAverageReward[cardId] = newAvg;
+                    }
+                    
+                    Logger.DebugWriteLine($"Updated Q-value for card {cardId}, action {actionKey}: {currentValue} → {newValue}");
                 }
-
+                
+                ValuesChanged = true;
+                
                 // Clear tracked actions after updating
                 CardActionsThisTurn.Clear();
             }
 
-            private double GetCurrentLearningRate(int cardId)
-            {
-                // Adaptive learning rate that decreases with experience
-                int usageCount = CardUsageCount.ContainsKey(cardId) ? CardUsageCount[cardId] : 0;
-                double decay = Math.Min(usageCount / 50.0, 1.0); // Gradual decay based on usage
-                return Math.Max(BaseLearningRate * (1 - decay), MinLearningRate);
-            }
-
             private double GetCurrentExplorationRate()
             {
-                // Use the base class helper method with our total actions
-                return base.GetCurrentExplorationRate(TotalActions, 0.3, 0.05);
+                // Get base exploration rate from config
+                double baseRate = ExplorationSettings.ContainsKey("BaseExplorationRate") 
+                    ? ExplorationSettings["BaseExplorationRate"] 
+                    : 0.4;
+                
+                // Get minimum exploration rate from config
+                double minRate = ExplorationSettings.ContainsKey("MinExplorationRate") 
+                    ? ExplorationSettings["MinExplorationRate"] 
+                    : 0.05;
+                
+                // Get decay rate from config
+                double decayRate = ExplorationSettings.ContainsKey("DecayRate") 
+                    ? ExplorationSettings["DecayRate"] 
+                    : 0.01;
+                
+                // Decay from base rate to min rate as we gain more experience
+                double decay = Math.Min(TotalActions * decayRate, 1.0);
+                return baseRate - (decay * (baseRate - minRate));
             }
 
+            // Modify the CalculateRewards method to use the configured reward factors
             public override void CalculateRewards(ClientField bot, ClientField enemy, bool duelEnding = false)
             {
                 double reward = 0.0;
-
-                // Life point changes
-                int enemyLPDiff = PreviousEnemyLP - enemy.LifePoints;
-                int botLPDiff = PreviousBotLP - bot.LifePoints;
                 
-                // Field presence
-                int botMonsterCount = bot.GetMonsterCount();
-                int enemyMonsterCount = enemy.GetMonsterCount();
-                int botSpellTrapCount = bot.GetSpellCount();
-                int enemySpellTrapCount = enemy.GetSpellCount();
+                // Life point differential
+                int currentBotLP = bot.LifePoints;
+                int currentEnemyLP = enemy.LifePoints;
+                double lifePointDiff = (currentBotLP - currentEnemyLP) / 1000.0;
+                reward += lifePointDiff * GetRewardFactor("LifePointDifferential");
                 
-                // Card advantage changes
-                int currentBotCards = bot.Hand.Count + botMonsterCount + botSpellTrapCount;
-                int currentEnemyCards = enemy.Hand.Count + enemyMonsterCount + enemySpellTrapCount;
-                int botCardDiff = currentBotCards - TurnStartBotCards;
-                int enemyCardDiff = currentEnemyCards - TurnStartEnemyCards;
+                // Card advantage 
+                int botCardCount = bot.Hand.Count + bot.GetMonsterCount() + bot.GetSpellCount();
+                int enemyCardCount = enemy.Hand.Count + enemy.GetMonsterCount() + enemy.GetSpellCount();
+                int cardDifferential = botCardCount - enemyCardCount;
+                reward += cardDifferential * GetRewardFactor("CardAdvantage");
                 
-                // Winning/losing
-                if (duelEnding)
-                {
-                    if (enemy.LifePoints <= 0)
-                        reward += 150.0; // Major reward for winning
-                    else if (bot.LifePoints <= 0)
-                        reward -= 150.0; // Major penalty for losing
-                }
-
-                // Dealing damage - progressive reward based on damage amount
-                if (enemyLPDiff > 0)
-                {
-                    double damageReward = 0;
-                    if (enemyLPDiff >= 4000) damageReward = 20.0;      // OTK-level damage
-                    else if (enemyLPDiff >= 2000) damageReward = 10.0; // Major damage
-                    else if (enemyLPDiff >= 1000) damageReward = 5.0;  // Significant damage
-                    else damageReward = enemyLPDiff / 200.0;           // Minor damage
-                    
-                    reward += damageReward;
-                    
-                    // Extra reward if enemy LP is now low
-                    if (enemy.LifePoints <= 2000)
-                        reward += 5.0;
-                }
-
-                // Taking damage - progressive penalty
-                if (botLPDiff > 0)
-                {
-                    double damagePenalty = 0;
-                    if (botLPDiff >= 4000) damagePenalty = 25.0;      // OTK-level damage
-                    else if (botLPDiff >= 2000) damagePenalty = 12.0; // Major damage
-                    else if (botLPDiff >= 1000) damagePenalty = 6.0;  // Significant damage
-                    else damagePenalty = botLPDiff / 150.0;           // Minor damage
-                    
-                    reward -= damagePenalty;
-                }
-
-                // Card advantage - refined with progressive rewards
-                if (botCardDiff > 0)
-                {
-                    reward += botCardDiff * 2.5; // Better reward for gaining cards
-                    
-                    // Extra reward for significant card advantage
-                    if (botCardDiff >= 3)
-                        reward += 5.0; // Bonus for strong card advantage
-                }
-                else if (botCardDiff < 0)
-                {
-                    reward += botCardDiff * 1.5; // Penalty for losing cards
-                }
+                // Field advantage (monsters)
+                int botMonsters = bot.GetMonsterCount();
+                int enemyMonsters = enemy.GetMonsterCount();
+                reward += (botMonsters - enemyMonsters) * GetRewardFactor("MonsterCountAdvantage");
                 
-                // Enemy card advantage
-                if (enemyCardDiff > 0)
-                {
-                    reward -= enemyCardDiff * 2.0; // Penalty for opponent gaining cards
-                    
-                    // Extra penalty for significant opponent advantage
-                    if (enemyCardDiff >= 3)
-                        reward -= 5.0;
-                }
-                
-                // Field presence (monsters)
-                reward += botMonsterCount * 1.5; // Increased reward for field presence
-                reward -= enemyMonsterCount * 1.5;
-                
-                // Field presence (spell/traps)
-                reward += botSpellTrapCount * 0.75;
-                reward -= enemySpellTrapCount * 0.75;
-                
-                // Extra reward for strong monsters
+                // Bonus for having monsters with high attack
                 foreach (ClientCard monster in bot.GetMonsters())
                 {
                     if (monster != null)
                     {
-                        if (monster.Attack >= 3000)
-                            reward += 4.0;
-                        else if (monster.Attack >= 2500)
-                            reward += 3.0;
-                        else if (monster.Attack >= 2000)
-                            reward += 2.0;
-                        else if (monster.Attack >= 1500)
-                            reward += 1.0;
+                        if (monster.Attack >= 2500)
+                            reward += GetRewardFactor("HighAttackMonsterBonus");
+                        
+                        // Add card type reward
+                        reward += GetCardTypeReward(monster) * 0.2;
                     }
                 }
                 
-                // Extra penalty for opponent's strong monsters
-                foreach (ClientCard monster in enemy.GetMonsters())
+                // Penalty for low life points
+                if (currentBotLP < 2000)
+                    reward -= GetRewardFactor("LowLifePointsPenalty", 0.3) * (2000 - currentBotLP) / 1000.0;
+                
+                // Reward for life point gain since previous update
+                if (currentBotLP > PreviousBotLP)
+                    reward += (currentBotLP - PreviousBotLP) / 1000.0;
+                
+                // Penalty for life point loss since previous update
+                if (currentBotLP < PreviousBotLP)
+                    reward -= (PreviousBotLP - currentBotLP) / 1000.0;
+                
+                // Reward for damaging opponent since previous update
+                if (currentEnemyLP < PreviousEnemyLP)
+                    reward += (PreviousEnemyLP - currentEnemyLP) / 1000.0;
+                
+                // Reward for card advantage gain since turn start
+                int currentBotCards = botCardCount;
+                int currentEnemyCards = enemyCardCount;
+                int botCardGain = currentBotCards - TurnStartBotCards;
+                int enemyCardGain = currentEnemyCards - TurnStartEnemyCards;
+                reward += (botCardGain - enemyCardGain) * GetRewardFactor("CardAdvantage") * 0.5;
+                
+                // If duel is ending, apply a strong final reward/penalty
+                if (duelEnding)
                 {
-                    if (monster != null)
+                    if (currentBotLP > currentEnemyLP)
+                        reward += GetRewardFactor("GameWinReward", 100.0);
+                    else
+                        reward += GetRewardFactor("GameLossReward", -100.0);
+                }
+                
+                // Apply action type multipliers to reward for each action this turn
+                foreach (var action in CardActionsThisTurn)
+                {
+                    try
                     {
-                        if (monster.Attack >= 3000)
-                            reward -= 4.0;
-                        else if (monster.Attack >= 2500)
-                            reward -= 3.0;
-                        else if (monster.Attack >= 2000)
-                            reward -= 2.0;
+                        reward *= GetActionTypeMultiplier(action.Value);
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        // If the action type doesn't have a multiplier, use default of 1.0
+                        Logger.DebugWriteLine($"Warning: No action multiplier found for action type {action.Value}, using default 1.0");
                     }
                 }
                 
-                // Reward for being in a winning position
-                if (bot.LifePoints > enemy.LifePoints && botMonsterCount > enemyMonsterCount)
-                    reward += 3.0;
-                
-                // Penalty for being in a losing position
-                if (bot.LifePoints < enemy.LifePoints && botMonsterCount < enemyMonsterCount)
-                    reward -= 3.0;
-
-                // Update Q-values with calculated reward
+                // Update Q-values with the calculated reward
                 UpdateQValues(reward);
                 
-                // Update state for next calculation
-                PreviousEnemyLP = enemy.LifePoints;
-                PreviousBotLP = bot.LifePoints;
-                TurnStartBotCards = currentBotCards;
-                TurnStartEnemyCards = currentEnemyCards;
-                
-                Logger.DebugWriteLine($"Calculated reward: {reward}");
+                // Update previous values for next comparison
+                PreviousBotLP = currentBotLP;
+                PreviousEnemyLP = currentEnemyLP;
             }
 
             public override void StartTurn(ClientField bot, ClientField enemy)
@@ -625,7 +802,7 @@ namespace WindBot.Game.AI.Decks
                 }
                 
                 // Use optimistic initialization to encourage exploration of new cards
-                return 2.0; // Default value for unknown card/action pairs
+                return 2.0; // Default value of 2.0 for unknown card/action pairs to encourage exploration
             }
             
             public override void ProcessDuelEnd(bool won)
@@ -713,45 +890,66 @@ namespace WindBot.Game.AI.Decks
         private readonly string RLFilePath;
 
         [Serializable]
+        [DataContract]
         private class ComboData
         {
+            [DataMember]
             public List<List<int>> KnownCombos { get; set; } = new List<List<int>>();
+            [DataMember]
             public List<List<int>> OpponentCombos { get; set; } = new List<List<int>>();
+            [DataMember]
             public string LastUpdated { get; set; } = DateTime.Now.ToString();
         }
 
         [Serializable]
+        [DataContract]
         private class ScoreData
         {
+            [DataMember]
             public Dictionary<int, int> CardComboScores { get; set; } = new Dictionary<int, int>();
+            [DataMember]
             public string LastUpdated { get; set; } = DateTime.Now.ToString();
         }
 
         [Serializable]
+        [DataContract]
         private class ComboStats
         {
+            [DataMember]
             public List<int> ComboCards { get; set; } = new List<int>();
+            [DataMember]
             public int TotalUses { get; set; } = 0;
+            [DataMember]
             public int Wins { get; set; } = 0;
+            [DataMember]
             public int Losses { get; set; } = 0;
+            [DataMember]
             public int Draws { get; set; } = 0;
             
             public double WinRate => (Wins + Losses + Draws) > 0 ? (double)Wins / (Wins + Losses + Draws) : 0;
         }
         
         [Serializable]
+        [DataContract]
         private class CounterStrategy
         {
+            [DataMember]
             public int CardId { get; set; }
+            [DataMember]
             public List<int> EffectiveCounters { get; set; } = new List<int>();
         }
         
         [Serializable]
+        [DataContract]
         private class EnhancedLearningData
         {
+            [DataMember]
             public Dictionary<string, ComboStats> ComboPerformance { get; set; } = new Dictionary<string, ComboStats>();
+            [DataMember]
             public Dictionary<int, CounterStrategy> CardCounters { get; set; } = new Dictionary<int, CounterStrategy>();
+            [DataMember]
             public Dictionary<string, List<List<int>>> StageSpecificCombos { get; set; } = new Dictionary<string, List<List<int>>>();
+            [DataMember]
             public string LastUpdated { get; set; } = DateTime.Now.ToString();
         }
 
@@ -3317,14 +3515,16 @@ namespace WindBot.Game.AI.Decks
                     return baseValue + noise + confidenceBonus;
                 }
                 
-                // For unknown actions, use optimistic initialization to encourage exploration
-                return 2.0 + (random.NextDouble() * 2.0);
+                // For unknown actions, return exactly 2.0 to encourage exploration
+                return 2.0;
             }
             
             // Calculate current exploration rate - decreases as the bot plays more games
             private double GetCurrentExplorationRate()
             {
-                // Decay from BaseExplorationRate to MinExplorationRate over many games
+                // We don't have direct access to the outer class's configuration here,
+                // so we'll use fixed values. For the more configurable version,
+                // use the RL system's version instead.
                 double decay = Math.Min(1.0, (double)TotalGameCount / 100.0);
                 return BaseExplorationRate - (decay * (BaseExplorationRate - MinExplorationRate));
             }
@@ -3332,6 +3532,9 @@ namespace WindBot.Game.AI.Decks
             // Calculate current learning rate - decreases with more experiences for stability
             private double GetCurrentLearningRate(string actionKey)
             {
+                // We don't have direct access to the outer class's configuration here,
+                // so we'll use fixed values. For the more configurable version,
+                // use the RL system's version instead.
                 int count = ActionCounts.ContainsKey(actionKey) ? ActionCounts[actionKey] : 0;
                 
                 // Decay from BaseLearningRate to MinLearningRate as we see more examples

@@ -9,6 +9,7 @@ namespace WindBot.Game
         public IList<long> ActivableDescs { get; private set; }
         public bool CanMainPhaseTwo { get; set; }
         public bool CanEndPhase { get; set; }
+        public bool End { get; set; }
 
         public BattlePhase()
         {

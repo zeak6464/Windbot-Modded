@@ -334,6 +334,25 @@ void WindBot_Game_AI_Executor_AddExecutor_1(WindBot_Game_AI_Executor* object, Wi
         mono_embeddinator_throw_exception(__exception);
 }
 
+void WindBot_Game_AI_Executor_SetEnd(WindBot_Game_AI_Executor* object)
+{
+    const char __method_name[] = "WindBot.Game.AI.Executor:SetEnd()";
+    static MonoMethod *__method = 0;
+
+    if (!__method)
+    {
+        __lookup_class_WindBot_Game_AI_Executor();
+        __method = mono_embeddinator_lookup_method(__method_name, class_WindBot_Game_AI_Executor);
+    }
+
+    MonoObject* __instance = mono_gchandle_get_target(object->_handle);
+    MonoObject* __exception = 0;
+    MonoObject* __result = mono_runtime_invoke(__method, __instance, 0, &__exception);
+
+    if (__exception)
+        mono_embeddinator_throw_exception(__exception);
+}
+
 const char* WindBot_Game_AI_Executor_get_Deck(WindBot_Game_AI_Executor* object)
 {
     const char __method_name[] = "WindBot.Game.AI.Executor:get_Deck()";
